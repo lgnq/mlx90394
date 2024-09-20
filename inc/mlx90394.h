@@ -74,6 +74,58 @@ union mlx90394_stat2
     };
 };
 
+typedef union
+{
+  struct
+  {
+    uint8_t mode      : 4;
+    uint8_t x_en      : 1;
+    uint8_t y_en      : 1;
+    uint8_t z_en      : 1;
+    uint8_t swoc      : 1;
+  };
+  uint8_t byte_val;
+} mlx90394_ctrl1_t;
+
+typedef union
+{
+  struct
+  {
+    uint8_t woc_mode      : 2;
+    uint8_t intrepb       : 1;
+    uint8_t intb_scl_b    : 1;
+    uint8_t intdur        : 2;
+    uint8_t config        : 2;
+  };
+  uint8_t byte_val;
+} mlx90394_ctrl2_t;
+
+typedef union
+{
+  struct
+  {
+    uint8_t dig_filt_temp    : 3;
+    uint8_t dig_filt_hall_xy : 3;
+    uint8_t osr_temp         : 1;
+    uint8_t osr_hall         : 1;
+  };
+  uint8_t byte_val;
+} mlx90394_ctrl3_t;
+
+typedef union
+{
+  struct
+  {
+    uint8_t dig_filt_hall_z : 3;
+    uint8_t drdy_en         : 1;
+    uint8_t dnc1            : 1;
+    uint8_t t_en            : 1;
+    uint8_t dnc2            : 1;
+    uint8_t dnc3            : 1;
+  };
+  uint8_t byte_val;
+} mlx90394_ctrl4_t;
+
 /* 3-axis data structure */
 struct mlx90394_xyz
 {
