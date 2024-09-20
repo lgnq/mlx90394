@@ -13,40 +13,21 @@
 
 #include <rtthread.h>
 
-#define MLX90394ELQ_AAA_010 0
-#define MLX90394ELQ_AAA_011 1
-#define MLX90394ELQ_AAA_013 2
+#define MLX90394RLD_AAA_000 0
+#define MLX90394RLD_AAA_001 1
 
-#define MLX90397RLQ_AAA_000 3
+#define MLX90394    MLX90394RLD_AAA_001
 
-#define MLX90394    MLX90394ELQ_AAA_011
-
-#if MLX90394 == MLX90394ELQ_AAA_010
-#define MLX90394_I2C_ADDRESS                    (0x0C)        // address pin A0,A1 low (GND), default for mlx90394
+#if MLX90394 == MLX90394RLD_AAA_000
+#define MLX90394_I2C_ADDRESS                    (0x10)        // address pin A0,A1 low (GND), default for mlx90394
 
 /**
  * @brief Magneto 10 magnetic flux resolution.
  * @details Specified resolution for magnetic flux of Magneto 10 Click driver.
  */
 #define MAGNETO10_MAG_FLUX_RESOLUTION   0.15    //uT/LSB
-#elif MLX90394 == mlx90394ELQ_AAA_011
-#define MLX90394_I2C_ADDRESS                    (0x0C)        // address pin A0,A1 low (GND), default for mlx90394
-
-/**
- * @brief Magneto 10 magnetic flux resolution.
- * @details Specified resolution for magnetic flux of Magneto 10 Click driver.
- */
-#define MAGNETO10_MAG_FLUX_RESOLUTION   1.5     //uT/LSB
-#elif MLX90394 == mlx90394ELQ_AAA_013
-#define MLX90394_I2C_ADDRESS                    (0x3C)        // address pin A0,A1 low (GND), default for mlx90394
-
-/**
- * @brief Magneto 10 magnetic flux resolution.
- * @details Specified resolution for magnetic flux of Magneto 10 Click driver.
- */
-#define MAGNETO10_MAG_FLUX_RESOLUTION   1.5     //uT/LSB
-#elif MLX90394 == MLX90397RLQ_AAA_000
-#define MLX90394_I2C_ADDRESS                    (0x0D)        // address pin A0,A1 low (GND), default for MLX90397
+#elif MLX90394 == MLX90394RLD_AAA_001
+#define MLX90394_I2C_ADDRESS                    (0x60)        // address pin A0,A1 low (GND), default for mlx90394
 
 /**
  * @brief Magneto 10 magnetic flux resolution.
