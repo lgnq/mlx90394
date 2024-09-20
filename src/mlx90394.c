@@ -50,10 +50,6 @@ static rt_err_t mlx90394_mem_direct_read(struct mlx90394_device *dev, rt_uint8_t
         }
 #endif
     }
-    else
-    {
-
-    }
 
     return res;
 }
@@ -98,10 +94,6 @@ static rt_err_t mlx90394_mem_read(struct mlx90394_device *dev, rt_uint8_t start_
         }
 #endif
     }
-    else
-    {
-
-    }
 
     return res;
 }
@@ -141,10 +133,6 @@ static rt_err_t mlx90394_mem_write(struct mlx90394_device *dev, rt_uint8_t *send
         }
 #endif
     }
-    else
-    {
-
-    }
 
     return res;
 }
@@ -177,10 +165,6 @@ static rt_err_t mlx90394_address_reset(struct mlx90394_device *dev)
             res = -RT_ERROR;
         }
 #endif
-    }
-    else
-    {
-
     }
 
     return res;
