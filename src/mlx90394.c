@@ -415,8 +415,8 @@ rt_err_t mlx90394_set_mode(struct mlx90394_device *dev, enum mlx90394_mode appli
         case CONTINUOUS_MEASUREMENT_MODE_10HZ:
             rt_kprintf("CONTINUOUS_MEASUREMENT_MODE_10HZ\r\n");
             break;
-        case CONTINUOUS_MEASUREMENT_MODE_20HZ:
-            rt_kprintf("CONTINUOUS_MEASUREMENT_MODE_20HZ\r\n");
+        case CONTINUOUS_MEASUREMENT_MODE_15HZ:
+            rt_kprintf("CONTINUOUS_MEASUREMENT_MODE_15HZ\r\n");
             break;
         case CONTINUOUS_MEASUREMENT_MODE_50HZ:
             rt_kprintf("CONTINUOUS_MEASUREMENT_MODE_50HZ\r\n");
@@ -432,6 +432,9 @@ rt_err_t mlx90394_set_mode(struct mlx90394_device *dev, enum mlx90394_mode appli
             break;
         case CONTINUOUS_MEASUREMENT_MODE_700HZ:
             rt_kprintf("CONTINUOUS_MEASUREMENT_MODE_700HZ\r\n");
+            break;
+        case CONTINUOUS_MEASUREMENT_MODE_1100HZ:
+            rt_kprintf("CONTINUOUS_MEASUREMENT_MODE_1100HZ");
             break;
         case CONTINUOUS_MEASUREMENT_MODE_1400HZ:
             rt_kprintf("CONTINUOUS_MEASUREMENT_MODE_1400HZ");
@@ -698,8 +701,8 @@ static rt_err_t mlx90394_continuous_measurement(struct mlx90394_device *dev, str
         status = mlx90394_set_mode(dev, CONTINUOUS_MEASUREMENT_MODE_10HZ);
         break;
     case 20:
-        rt_kprintf("20Hz");
-        status = mlx90394_set_mode(dev, CONTINUOUS_MEASUREMENT_MODE_20HZ);
+        rt_kprintf("15Hz");
+        status = mlx90394_set_mode(dev, CONTINUOUS_MEASUREMENT_MODE_15HZ);
         break;
     case 50:
         rt_kprintf("50Hz");
@@ -720,6 +723,10 @@ static rt_err_t mlx90394_continuous_measurement(struct mlx90394_device *dev, str
     case 700:
         rt_kprintf("700Hz");
         status = mlx90394_set_mode(dev, CONTINUOUS_MEASUREMENT_MODE_700HZ);
+        break;
+    case 1100:
+        rt_kprintf("1100Hz");
+        status = mlx90394_set_mode(dev, CONTINUOUS_MEASUREMENT_MODE_1100HZ);
         break;
     case 1400:
         rt_kprintf("1400Hz");
