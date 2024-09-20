@@ -38,6 +38,7 @@
 
 #define MAGNETO10_TEMPERATURE_RES       50.0
 
+//ADDR = 0x00
 union mlx90394_stat1
 {
     rt_uint8_t byte_val;
@@ -48,23 +49,24 @@ union mlx90394_stat1
         rt_uint8_t stat1_1  : 1;
         rt_uint8_t stat1_2  : 1;
         rt_uint8_t rt       : 1;
-        rt_uint8_t stat1_4  : 1;
+        rt_uint8_t interrupt: 1;
         rt_uint8_t stat1_5  : 1;
         rt_uint8_t stat1_6  : 1;
         rt_uint8_t stat1_7  : 1;
     };
 };
 
+//ADDR = 0x07
 union mlx90394_stat2
 {
     rt_uint8_t byte_val;
 
     struct
     {
-        rt_uint8_t hovf     : 1;    //BIT0
+        rt_uint8_t hovf_x   : 1;    //BIT0
+        rt_uint8_t hovf_y   : 1;
+        rt_uint8_t hovf_z   : 1;
         rt_uint8_t dor      : 1;
-        rt_uint8_t stat2_2  : 1;
-        rt_uint8_t stat2_3  : 1;
         rt_uint8_t stat2_4  : 1;
         rt_uint8_t stat2_5  : 1;
         rt_uint8_t stat2_6  : 1;
@@ -92,19 +94,19 @@ enum mlx90394_mode
 {
     POWER_DOWN_MODE                     = 0x0,
     SINGLE_MEASUREMENT_MODE             = 0x1,
-    CONTINUOUS_MEASUREMENT_MODE_10HZ    = 0x2,
-    CONTINUOUS_MEASUREMENT_MODE_20HZ    = 0x3,
-    CONTINUOUS_MEASUREMENT_MODE_50HZ    = 0x4,
-    CONTINUOUS_MEASUREMENT_MODE_100HZ   = 0x5,
-//    SELF_TEST_MODE                      = 0x6,
-//    POWER_DOWN_MODE                     = 0x7,
+    CONTINUOUS_MEASUREMENT_MODE_5HZ     = 0x2,
+    CONTINUOUS_MEASUREMENT_MODE_10HZ    = 0x3,
+    CONTINUOUS_MEASUREMENT_MODE_15HZ    = 0x4,
+    CONTINUOUS_MEASUREMENT_MODE_50HZ    = 0x5,
+    CONTINUOUS_MEASUREMENT_MODE_100HZ   = 0x6,
+    SELF_TEST                           = 0x7,
 //    POWER_DOWN_MODE                     = 0x8,
 //    SINGLE_MEASUREMENT_MODE             = 0x9,
     CONTINUOUS_MEASUREMENT_MODE_200HZ   = 0xA,
     CONTINUOUS_MEASUREMENT_MODE_500HZ   = 0xB,
     CONTINUOUS_MEASUREMENT_MODE_700HZ   = 0xC,
+    CONTINUOUS_MEASUREMENT_MODE_1100HZ  = 0xD,
     CONTINUOUS_MEASUREMENT_MODE_1400HZ  = 0xD,
-//    SELF_TEST_MODE                      = 0xE,
 //    POWER_DOWN_MODE                     = 0xF
 };
 
