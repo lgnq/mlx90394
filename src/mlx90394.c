@@ -170,11 +170,29 @@ static rt_err_t mlx90394_address_reset(struct mlx90394_device *dev)
     return res;
 }
 
+static rt_err_t mlx90394_reset(struct mlx90394_device *dev)
+{
+    rt_err_t res = RT_EOK;
+    uint8_t dat = 0x06;
+
+    res = mlx90394_mem_read(dev, MLX90394_ADDR_RST, &dat, 1);
+    if (res != RT_EOK)
+    {
+        rt_kprintf("error\r\n");
+    }
+    else
+    {
+        rt_kprintf("MLX90394 reset successfully\r\n");
+    }
+
+    return res;
+}
+
 static rt_err_t mlx90394_get_stat1(struct mlx90394_device *dev, union mlx90394_stat1 *stat1)
 {
     rt_err_t res = RT_EOK;
 
-    res = mlx90394_mem_read(dev, 0x0, (rt_uint8_t *)stat1, 1);
+    res = mlx90394_mem_read(dev, MLX90394_ADDR_STAT1, (rt_uint8_t *)stat1, 1);
     if (res != RT_EOK)
     {
         rt_kprintf("error\r\n");
@@ -191,7 +209,7 @@ static rt_err_t mlx90394_get_stat2(struct mlx90394_device *dev, union mlx90394_s
 {
     rt_err_t res = RT_EOK;
 
-    res = mlx90394_mem_read(dev, 0x7, (rt_uint8_t *)stat2, 1);
+    res = mlx90394_mem_read(dev, MLX90394_ADDR_STAT2, (rt_uint8_t *)stat2, 1);
     if (res != RT_EOK)
     {
         rt_kprintf("error\r\n");
@@ -355,7 +373,7 @@ rt_err_t mlx90394_get_cid(struct mlx90394_device *dev, rt_uint8_t *cid)
 {
     rt_err_t res = RT_EOK;
 
-    res = mlx90394_mem_read(dev, 0xA, cid, 1);
+    res = mlx90394_mem_read(dev, MLX90394_ADDR_CID, cid, 1);
     if (res != RT_EOK)
     {
         rt_kprintf("Read CID is error\r\n");
@@ -368,7 +386,7 @@ rt_err_t mlx90394_get_did(struct mlx90394_device *dev, rt_uint8_t *did)
 {
     rt_err_t res = RT_EOK;
 
-    res = mlx90394_mem_read(dev, 0xB, did, 1);
+    res = mlx90394_mem_read(dev, MLX90394_ADDR_DID, did, 1);
     if (res != RT_EOK)
     {
         rt_kprintf("Read DID is error\r\n");
