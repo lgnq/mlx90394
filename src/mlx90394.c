@@ -186,6 +186,32 @@ rt_err_t mlx90394_reset(struct mlx90394_device *dev)
     return res;
 }
 
+rt_err_t mlx90394_get_cid(struct mlx90394_device *dev, rt_uint8_t *cid)
+{
+    rt_err_t res = RT_EOK;
+
+    res = mlx90394_mem_read(dev, MLX90394_ADDR_CID, cid, 1);
+    if (res != RT_EOK)
+    {
+        rt_kprintf("Read CID is error\r\n");
+    }
+
+    return res;
+}
+
+rt_err_t mlx90394_get_did(struct mlx90394_device *dev, rt_uint8_t *did)
+{
+    rt_err_t res = RT_EOK;
+
+    res = mlx90394_mem_read(dev, MLX90394_ADDR_DID, did, 1);
+    if (res != RT_EOK)
+    {
+        rt_kprintf("Read DID is error\r\n");
+    }
+
+    return res;
+}
+
 static rt_err_t mlx90394_get_stat1(struct mlx90394_device *dev, union mlx90394_stat1 *stat1)
 {
     rt_err_t res = RT_EOK;
@@ -494,32 +520,6 @@ rt_err_t mlx90394_get_temperature(struct mlx90394_device *dev, float *t)
     if (res == RT_EOK)
     {
         *t = (float)(((rt_int16_t)recv_buf[1] << 8 ) | recv_buf[0] ) / MAGNETO10_TEMPERATURE_RES;
-    }
-
-    return res;
-}
-
-rt_err_t mlx90394_get_cid(struct mlx90394_device *dev, rt_uint8_t *cid)
-{
-    rt_err_t res = RT_EOK;
-
-    res = mlx90394_mem_read(dev, MLX90394_ADDR_CID, cid, 1);
-    if (res != RT_EOK)
-    {
-        rt_kprintf("Read CID is error\r\n");
-    }
-
-    return res;
-}
-
-rt_err_t mlx90394_get_did(struct mlx90394_device *dev, rt_uint8_t *did)
-{
-    rt_err_t res = RT_EOK;
-
-    res = mlx90394_mem_read(dev, MLX90394_ADDR_DID, did, 1);
-    if (res != RT_EOK)
-    {
-        rt_kprintf("Read DID is error\r\n");
     }
 
     return res;
