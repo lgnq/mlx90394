@@ -393,105 +393,6 @@ static rt_bool_t mlx90394_is_data_ready(struct mlx90394_device *dev)
     }
 }
 
-rt_err_t mlx90394_get_x(struct mlx90394_device *dev, rt_int16_t *x)
-{
-    rt_err_t res = RT_EOK;
-    rt_uint8_t recv_buf[2];
-
-    res = mlx90394_mem_read(dev, 0x1, recv_buf, 2);
-    if (res == RT_EOK)
-    {
-        *x = recv_buf[1]<<8 | recv_buf[0];
-    }
-
-    return res;
-}
-
-rt_err_t mlx90394_get_y(struct mlx90394_device *dev, rt_int16_t *y)
-{
-    rt_err_t res = RT_EOK;
-    rt_uint8_t recv_buf[2];
-
-    res = mlx90394_mem_read(dev, 0x3, recv_buf, 2);
-    if (res == RT_EOK)
-    {
-        *y = recv_buf[1]<<8 | recv_buf[0];
-    }
-
-    return res;
-}
-
-rt_err_t mlx90394_get_z(struct mlx90394_device *dev, rt_int16_t *z)
-{
-    rt_err_t res = RT_EOK;
-    rt_uint8_t recv_buf[2];
-
-    res = mlx90394_mem_read(dev, 0x5, recv_buf, 2);
-    if (res == RT_EOK)
-    {
-        *z = recv_buf[1]<<8 | recv_buf[0];
-    }
-
-    return res;
-}
-
-rt_err_t mlx90394_get_x_flux(struct mlx90394_device *dev, float *x)
-{
-    rt_err_t res = RT_EOK;
-    rt_uint8_t recv_buf[2];
-
-    while (mlx90394_is_data_ready(dev) == RT_FALSE)
-    {
-        rt_thread_delay(100);
-    }
-
-    res = mlx90394_mem_read(dev, 0x1, recv_buf, 2);
-    if (res == RT_EOK)
-    {
-        *x = (float)(((rt_int16_t)recv_buf[1] << 8) | recv_buf[0])*MAGNETO10_MAG_FLUX_RESOLUTION;
-    }
-
-    return res;
-}
-
-rt_err_t mlx90394_get_y_flux(struct mlx90394_device *dev, float *y)
-{
-    rt_err_t res = RT_EOK;
-    rt_uint8_t recv_buf[2];
-
-    while (mlx90394_is_data_ready(dev) == RT_FALSE)
-    {
-        rt_thread_delay(100);
-    }
-
-    res = mlx90394_mem_read(dev, 0x3, recv_buf, 2);
-    if (res == RT_EOK)
-    {
-        *y = (float)(((rt_int16_t)recv_buf[1] << 8) | recv_buf[0])*MAGNETO10_MAG_FLUX_RESOLUTION;
-    }
-
-    return res;
-}
-
-rt_err_t mlx90394_get_z_flux(struct mlx90394_device *dev, float *z)
-{
-    rt_err_t res = RT_EOK;
-    rt_uint8_t recv_buf[2];
-
-    while (mlx90394_is_data_ready(dev) == RT_FALSE)
-    {
-        rt_thread_delay(100);
-    }
-
-    res = mlx90394_mem_read(dev, 0x5, recv_buf, 2);
-    if (res == RT_EOK)
-    {
-        *z = (float)(((rt_int16_t)recv_buf[1] << 8) | recv_buf[0])*MAGNETO10_MAG_FLUX_RESOLUTION;
-    }
-
-    return res;
-}
-
 rt_err_t mlx90394_get_t(struct mlx90394_device *dev, rt_int16_t *t)
 {
     rt_err_t res = RT_EOK;
@@ -1188,27 +1089,6 @@ static void mlx90394(int argc, char **argv)
         else if (!strcmp(argv[1], "mode"))
         {
             mlx90394_set_mode(dev, atoi(argv[2]));
-        }
-        else if (!strcmp(argv[1], "x"))
-        {
-            rt_int16_t x;
-
-            mlx90394_get_x(dev, &x);
-            rt_kprintf("x = 0x%x\r\n", x);
-        }
-        else if (!strcmp(argv[1], "y"))
-        {
-            rt_int16_t y;
-
-            mlx90394_get_y(dev, &y);
-            rt_kprintf("y = 0x%x\r\n", y);
-        }
-        else if (!strcmp(argv[1], "z"))
-        {
-            rt_int16_t z;
-
-            mlx90394_get_z(dev, &z);
-            rt_kprintf("z = 0x%x\r\n", z);
         }
         else if (!strcmp(argv[1], "t"))
         {
