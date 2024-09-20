@@ -38,6 +38,23 @@
 
 #define MAGNETO10_TEMPERATURE_RES       50.0
 
+#define MLX90394_ADDR_STAT1           0x0
+#define MLX90394_ADDR_STAT2           0x7
+#define MLX90394_ADDR_TEMPERATURE     0x8
+
+#define MLX90394_ADDR_CID             0xA
+#define MLX90394_ADDR_DID             0xB
+
+#define MLX90394_ADDR_CTRL1           0x0E
+#define MLX90394_ADDR_CTRL2           0x0F
+#define MLX90394_ADDR_RST             0x11
+#define MLX90394_ADDR_CTRL3           0x14
+#define MLX90394_ADDR_CTRL4           0x15
+
+#define MLX90394_ADDR_WOC_THRESHOLD_X 0x58
+#define MLX90394_ADDR_WOC_THRESHOLD_Y 0x5A
+#define MLX90394_ADDR_WOC_THRESHOLD_Z 0x5C
+
 //ADDR = 0x00
 union mlx90394_stat1
 {
