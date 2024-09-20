@@ -170,19 +170,17 @@ static rt_err_t mlx90394_address_reset(struct mlx90394_device *dev)
     return res;
 }
 
-static rt_err_t mlx90394_reset(struct mlx90394_device *dev)
+rt_err_t mlx90394_reset(struct mlx90394_device *dev)
 {
     rt_err_t res = RT_EOK;
-    uint8_t dat = 0x06;
+    rt_uint8_t send_buf[2];
 
-    res = mlx90394_mem_read(dev, MLX90394_ADDR_RST, &dat, 1);
+    send_buf[0] = MLX90394_ADDR_RST;
+    send_buf[1] = 0x06;
+    res = mlx90394_mem_write(dev, send_buf, 2);
     if (res != RT_EOK)
     {
-        rt_kprintf("error\r\n");
-    }
-    else
-    {
-        rt_kprintf("MLX90394 reset successfully\r\n");
+        rt_kprintf("Reset error\r\n");
     }
 
     return res;
@@ -217,6 +215,138 @@ static rt_err_t mlx90394_get_stat2(struct mlx90394_device *dev, union mlx90394_s
     else
     {
         rt_kprintf("STAT2 = 0x%x\r\n", stat2->byte_val);
+    }
+
+    return res;
+}
+
+static rt_err_t mlx90394_get_ctrl1(struct mlx90394_device *dev, mlx90394_ctrl1_t *ctrl1)
+{
+    rt_err_t res = RT_EOK;
+
+    res = mlx90394_mem_read(dev, MLX90394_ADDR_CTRL1, (rt_uint8_t *)ctrl1, 1);
+    if (res != RT_EOK)
+    {
+        rt_kprintf("error\r\n");
+    }
+    else
+    {
+        rt_kprintf("CTRL1 = 0x%x\r\n", ctrl1->byte_val);
+    }
+
+    return res;
+}
+
+rt_err_t mlx90394_set_ctrl1(struct mlx90394_device *dev, rt_uint8_t val)
+{
+    rt_err_t res = RT_EOK;
+    rt_uint8_t send_buf[2];
+
+    send_buf[0] = MLX90394_ADDR_CTRL1;
+    send_buf[1] = val;
+    res = mlx90394_mem_write(dev, send_buf, 2);
+    if (res != RT_EOK)
+    {
+        rt_kprintf("Set CTRL1 error\r\n");
+    }
+
+    return res;
+}
+
+static rt_err_t mlx90394_get_ctrl2(struct mlx90394_device *dev, mlx90394_ctrl2_t *ctrl2)
+{
+    rt_err_t res = RT_EOK;
+
+    res = mlx90394_mem_read(dev, MLX90394_ADDR_CTRL2, (rt_uint8_t *)ctrl2, 1);
+    if (res != RT_EOK)
+    {
+        rt_kprintf("error\r\n");
+    }
+    else
+    {
+        rt_kprintf("CTRL2 = 0x%x\r\n", ctrl2->byte_val);
+    }
+
+    return res;
+}
+
+rt_err_t mlx90394_set_ctrl2(struct mlx90394_device *dev, rt_uint8_t val)
+{
+    rt_err_t res = RT_EOK;
+    rt_uint8_t send_buf[2];
+
+    send_buf[0] = MLX90394_ADDR_CTRL2;
+    send_buf[1] = val;
+    res = mlx90394_mem_write(dev, send_buf, 2);
+    if (res != RT_EOK)
+    {
+        rt_kprintf("Set CTRL2 error\r\n");
+    }
+
+    return res;
+}
+
+static rt_err_t mlx90394_get_ctrl3(struct mlx90394_device *dev, mlx90394_ctrl3_t *ctrl3)
+{
+    rt_err_t res = RT_EOK;
+
+    res = mlx90394_mem_read(dev, MLX90394_ADDR_CTRL3, (rt_uint8_t *)ctrl3, 1);
+    if (res != RT_EOK)
+    {
+        rt_kprintf("error\r\n");
+    }
+    else
+    {
+        rt_kprintf("CTRL3 = 0x%x\r\n", ctrl3->byte_val);
+    }
+
+    return res;
+}
+
+rt_err_t mlx90394_set_ctrl3(struct mlx90394_device *dev, rt_uint8_t val)
+{
+    rt_err_t res = RT_EOK;
+    rt_uint8_t send_buf[2];
+
+    send_buf[0] = MLX90394_ADDR_CTRL3;
+    send_buf[1] = val;
+    res = mlx90394_mem_write(dev, send_buf, 2);
+    if (res != RT_EOK)
+    {
+        rt_kprintf("Set CTRL3 error\r\n");
+    }
+
+    return res;
+}
+
+static rt_err_t mlx90394_get_ctrl4(struct mlx90394_device *dev, mlx90394_ctrl4_t *ctrl4)
+{
+    rt_err_t res = RT_EOK;
+
+    res = mlx90394_mem_read(dev, MLX90394_ADDR_CTRL4, (rt_uint8_t *)ctrl4, 1);
+    if (res != RT_EOK)
+    {
+        rt_kprintf("error\r\n");
+    }
+    else
+    {
+        rt_kprintf("CTRL4 = 0x%x\r\n", ctrl4->byte_val);
+    }
+
+    return res;
+}
+
+rt_err_t mlx90394_set_ctrl4(struct mlx90394_device *dev, rt_uint8_t val)
+{
+    rt_err_t res = RT_EOK;
+    rt_uint8_t send_buf[2];
+
+    send_buf[0] = MLX90394_ADDR_CTRL4;
+    send_buf[1] = val;
+    res = mlx90394_mem_write(dev, send_buf, 2);
+    if (res != RT_EOK)
+    {
+        rt_kprintf("Set CTRL4 error\r\n");
     }
 
     return res;
