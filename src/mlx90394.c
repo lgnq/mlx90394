@@ -789,7 +789,7 @@ static rt_err_t mlx90394_continuous_measurement(struct mlx90394_device *dev, str
         if (stat1.drdy == 1)
         {
             status = mlx90394_get_xyz(dev, xyz);
-            rt_kprintf("x = 0x%x, y = 0x%x, z = 0x%x\r\n", xyz->x, xyz->y, xyz->z);
+            rt_kprintf("$%d %d %d;", xyz->x, xyz->y, xyz->z);
         }
 
         rt_thread_delay(100);
