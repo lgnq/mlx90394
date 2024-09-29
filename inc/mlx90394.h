@@ -310,50 +310,6 @@ typedef enum mlx90394_oversampling
     mlx90394_OSR_3,
 } mlx90394_oversampling_t;
 
-union mlx90394_status
-{
-    struct
-    {
-    /** D1-D0: indicates the number of bytes (2D[1:0]) to follow the status byte after a read measurement
-     * or a read register command has been sent.
-     */
-    rt_uint8_t d0 : 1;
-    /** D1-D0: indicates the number of bytes (2D[1:0]) to follow the status byte after a read measurement
-     * or a read register command has been sent.
-     */
-    rt_uint8_t d1 : 1;
-
-    /** RS: indicates that the device has been reset successfully by a reset command.
-     */
-    rt_uint8_t rs : 1;
-
-    /** SED: indicates that a single bit error has been corrected by the NVRAM
-     */
-    rt_uint8_t sed : 1;
-
-    /** ERROR: indicates an error.
-     * Can be set when reading out a measurement while the measurement is not yet completed or
-     * when reading out the same measurement twice.
-     */
-    rt_uint8_t error : 1;
-
-    /** SM_mode: if set, the IC is executing a measurement sequence in polling mode.
-     * It can be initiated by a SM command or a pulse on the TRIG input.
-     */
-    rt_uint8_t sm_mode : 1;
-
-    /** WOC_mode: if set, the IC is in wake-up-on-change mode.
-     */
-    rt_uint8_t woc_mode : 1;
-
-    /** Burst_mode: if set, the IC is working in burst mode.
-     */
-    rt_uint8_t burst_mode : 1;
-    };
-
-    rt_uint8_t byte_val;
-};
-
 /* mlx90394 config structure */
 struct mlx90394_config
 {
@@ -388,37 +344,6 @@ struct mlx90394_device *mlx90394_init(const char *dev_name, rt_uint8_t param);
 void mlx90394_deinit(struct mlx90394_device *dev);
 
 /**
- * This function set mlx90394 parameters.
- *
- * @param dev the pointer of device driver structure
- * @param cmd Configuration item
- * @param param Configuration item parameter
- *
- * @return the setting status, RT_EOK reprensents  setting the parameter successfully.
- */
-rt_err_t mlx90394_set_param(struct mlx90394_device *dev, enum mlx90394_cmd cmd, rt_uint16_t param);
-
-/**
-* This function gets the data of the mps, unit: mg
- *
- * @param dev the pointer of device driver structure
- * @param mps the pointer of 3axes structure for receive data
- *
- * @return the reading status, RT_EOK reprensents  reading the data successfully.
- */
-rt_err_t mlx90394_get_mps(struct mlx90394_device *dev, struct mlx90394_3axes *accel);
-
-/**
-* This function gets the data of the gyroscope, unit: deg/10s
- *
- * @param dev the pointer of device driver structure
- * @param gyro the pointer of 3axes structure for receive data
- *
- * @return the reading status, RT_EOK reprensents  reading the data successfully.
- */
-rt_err_t mlx90394_get_gyro(struct mlx90394_device *dev, struct mlx90394_3axes *gyro);
-
-/**
  * This function gets the data of the temperature, unit: Centigrade
  *
  * @param dev the pointer of device driver structure
@@ -427,46 +352,6 @@ rt_err_t mlx90394_get_gyro(struct mlx90394_device *dev, struct mlx90394_3axes *g
  * @return the reading status, RT_EOK reprensents  reading the data successfully.
  */
 rt_err_t mlx90394_get_temp(struct mlx90394_device *dev, float *temp);
-
-/**
-* This function sets the offset of the accelerometer
- *
- * @param dev the pointer of device driver structure
- * @param offset the pointer of 3axes structure of offsets
- *
- * @return the setting status, RT_EOK reprensents setting the offsets successfully.
- */
-rt_err_t mlx90394_set_accel_offset(struct mlx90394_device *dev, struct mlx90394_3axes *offset);
-
-/**
-* This function gets the offset of the accelerometer
- *
- * @param dev the pointer of device driver structure
- * @param offset the pointer of 3axes structure of offsets
- *
- * @return the setting status, RT_EOK reprensents reading the offsets successfully.
- */
-rt_err_t mlx90394_get_accel_offset(struct mlx90394_device *dev, struct mlx90394_3axes *offset);
-
-/**
-* This function sets the offset of the gyroscope
- *
- * @param dev the pointer of device driver structure
- * @param offset the pointer of 3axes structure of offsets
- *
- * @return the setting status, RT_EOK reprensents setting the offsets successfully.
- */
-rt_err_t mlx90394_set_gyro_offset(struct mlx90394_device *dev, struct mlx90394_3axes *offset);
-
-/**
-* This function gets the offset of the gyroscope
- *
- * @param dev the pointer of device driver structure
- * @param offset the pointer of 3axes structure of offsets
- *
- * @return the setting status, RT_EOK reprensents reading the offsets successfully.
- */
-rt_err_t mlx90394_get_gyro_offset(struct mlx90394_device *dev, struct mlx90394_3axes *offset);
 
 rt_err_t mlx90394_nop(struct mlx90394_device *dev);
 rt_err_t mlx90394_exit(struct mlx90394_device *dev);
