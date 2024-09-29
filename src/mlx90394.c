@@ -1122,7 +1122,10 @@ static void mlx90394(int argc, char **argv)
         {
             struct mlx90394_xyz xyz;
 
-            mlx90394_continuous_measurement(dev, &xyz, atoi(argv[2]));
+            if (argc == 2)
+                mlx90394_continuous_measurement(dev, &xyz, 500);
+            else if (argc == 3)
+                mlx90394_continuous_measurement(dev, &xyz, atoi(argv[2]));
         }
         else
         {
