@@ -343,16 +343,6 @@ struct mlx90394_device *mlx90394_init(const char *dev_name, rt_uint8_t param);
  */
 void mlx90394_deinit(struct mlx90394_device *dev);
 
-/**
- * This function gets the data of the temperature, unit: Centigrade
- *
- * @param dev the pointer of device driver structure
- * @param temp read data pointer
- *
- * @return the reading status, RT_EOK reprensents  reading the data successfully.
- */
-rt_err_t mlx90394_get_temp(struct mlx90394_device *dev, float *temp);
-
 rt_err_t mlx90394_nop(struct mlx90394_device *dev);
 rt_err_t mlx90394_exit(struct mlx90394_device *dev);
 rt_err_t mlx90394_reset(struct mlx90394_device *dev);
