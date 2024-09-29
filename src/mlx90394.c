@@ -429,8 +429,12 @@ rt_err_t mlx90394_get_temperature(struct mlx90394_device *dev, float *t)
 rt_err_t mlx90394_get_mode(struct mlx90394_device *dev, rt_uint8_t *mode)
 {
     rt_err_t res = RT_EOK;
+    mlx90394_ctrl1_t ctrl1;
 
-    res = mlx90394_mem_read(dev, 0x10, mode, 1);
+    res = mlx90394_mem_read(dev, MLX90394_ADDR_CTRL1, &ctrl1.byte_val, 1);
+
+    *mode = ctrl1.mode;
+
     if (res != RT_EOK)
     {
         rt_kprintf("Read MODE is error\r\n");
@@ -444,8 +448,18 @@ rt_err_t mlx90394_set_mode(struct mlx90394_device *dev, enum mlx90394_mode appli
     rt_err_t res = RT_EOK;
     rt_uint8_t send_buf[2];
 
-    send_buf[0] = 0x10;
-    send_buf[1] = application_mode;
+    mlx90394_ctrl1_t ctrl1;
+
+    res = mlx90394_mem_read(dev, MLX90394_ADDR_CTRL1, &ctrl1.byte_val, 1);
+    if (res != RT_EOK)
+    {
+        rt_kprintf("set application mode error\r\n");
+    }
+
+    ctrl1.mode = application_mode;
+
+    send_buf[0] = MLX90394_ADDR_CTRL1;
+    send_buf[1] = ctrl1.byte_val;
     res = mlx90394_mem_write(dev, send_buf, 2);
     if (res != RT_EOK)
     {
