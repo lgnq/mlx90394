@@ -118,20 +118,21 @@ static rt_err_t _mlx90394_reset(rt_sensor_t sensor)
 
 static rt_size_t _mlx90394_polling_get_data(rt_sensor_t sensor, struct rt_sensor_data *data)
 {
-//    if (sensor->info.type == RT_SENSOR_CLASS_MPS)
-//    {
-//        struct mlx90394_3axes acce;
-//        if (mlx90394_get_accel(mpu_dev, &acce) != RT_EOK)
-//        {
-//            return 0;
-//        }
-//
-//        data->type = RT_SENSOR_CLASS_ACCE;
-//        data->data.acce.x = acce.x;
-//        data->data.acce.y = acce.y;
-//        data->data.acce.z = acce.z;
-//        data->timestamp = rt_sensor_get_ts();
-//    }
+    if (sensor->info.type == RT_SENSOR_CLASS_MAG)
+    {
+        struct mlx90394_xyz xyz;
+
+        if (mlx90394_single_measurement((struct mlx90394_device *)sensor->parent.user_data, &xyz) != RT_EOK)
+        {
+            return 0;
+        }
+
+        data->type = RT_SENSOR_CLASS_MAG;
+        data->data.mag.x = xyz.x;
+        data->data.mag.y = xyz.y;
+        data->data.mag.z = xyz.z;
+        data->timestamp = rt_sensor_get_ts();
+    }
 
     return 1;
 }
