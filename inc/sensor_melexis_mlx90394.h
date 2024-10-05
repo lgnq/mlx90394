@@ -14,8 +14,6 @@
 #include "sensor.h"
 #include "mlx90394.h"
 
-#define mlx90394_I2C_ADDRESS                    0x19 // address pin A0/A1 low(GND), default for Melexis MLX90393
-
 #define mlx90394_CTRL_NOP                       0x10
 #define mlx90394_CTRL_RESET                     0x11
 
