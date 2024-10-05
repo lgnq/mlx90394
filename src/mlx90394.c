@@ -511,91 +511,6 @@ rt_err_t mlx90394_set_mode(struct mlx90394_device *dev, enum mlx90394_mode appli
     return res;
 }
 
-rt_err_t mlx90394_get_osr_dig_filt(struct mlx90394_device *dev, union mlx90394_osr_dig_filt *val)
-{
-    rt_err_t res = RT_EOK;
-
-    res = mlx90394_mem_read(dev, 0x14, (rt_uint8_t *)val, 1);
-    if (res != RT_EOK)
-    {
-        rt_kprintf("Get OSR_DIG_FILT error\r\n");
-    }
-
-    return res;
-}
-
-rt_err_t mlx90394_set_osr_dig_filt(struct mlx90394_device *dev, union mlx90394_osr_dig_filt val)
-{
-    rt_err_t res = RT_EOK;
-    rt_uint8_t send_buf[2];
-
-    send_buf[0] = 0x14;
-    send_buf[1] = val.byte_val;
-    res = mlx90394_mem_write(dev, send_buf, 2);
-    if (res != RT_EOK)
-    {
-        rt_kprintf("Set OSR_DIG_FILT error\r\n");
-    }
-
-    return res;
-}
-
-rt_err_t mlx90394_get_cust_ctrl(struct mlx90394_device *dev, union mlx90394_cust_ctrl *val)
-{
-    rt_err_t res = RT_EOK;
-
-    res = mlx90394_mem_read(dev, 0x15, (rt_uint8_t *)val, 1);
-    if (res != RT_EOK)
-    {
-        rt_kprintf("Get CUST_CTRL error\r\n");
-    }
-
-    return res;
-}
-
-rt_err_t mlx90394_set_cust_ctrl(struct mlx90394_device *dev, union mlx90394_cust_ctrl val)
-{
-    rt_err_t res = RT_EOK;
-    rt_uint8_t send_buf[2];
-
-    send_buf[0] = 0x15;
-    send_buf[1] = val.byte_val;
-    res = mlx90394_mem_write(dev, send_buf, 2);
-    if (res != RT_EOK)
-    {
-        rt_kprintf("Set CUST_CTRL error\r\n");
-    }
-
-    return res;
-}
-
-rt_err_t mlx90394_set_temperature(struct mlx90394_device *dev, rt_uint8_t onoff)
-{
-    rt_err_t res = RT_EOK;
-    union mlx90394_cust_ctrl val;
-
-    res = mlx90394_get_cust_ctrl(dev, &val);
-
-    if (1 == onoff)
-    {
-        if (val.t_comp_en == 0)
-        {
-            val.t_comp_en = 1;
-            res = mlx90394_set_cust_ctrl(dev, val);
-        }
-    }
-    else
-    {
-        if (val.t_comp_en == 1)
-        {
-            val.t_comp_en = 0;
-            res = mlx90394_set_cust_ctrl(dev, val);
-        }
-    }
-
-    return res;
-}
-
 rt_err_t mlx90394_get_xyz(struct mlx90394_device *dev, struct mlx90394_xyz *xyz)
 {
     rt_err_t res = RT_EOK;
@@ -885,7 +800,6 @@ struct mlx90394_device *mlx90394_init(const char *dev_name, rt_uint8_t param)
             rt_kprintf("DID is 0x%x\r\n", id[1]);
 
             mlx90394_set_mode(dev, SINGLE_MEASUREMENT_MODE);
-            mlx90394_set_temperature(dev, 1);
         }
 
         rt_kprintf("Device i2c address is:'0x%x'!\r\n", dev->i2c_addr);

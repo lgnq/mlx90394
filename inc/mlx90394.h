@@ -179,35 +179,6 @@ enum mlx90394_mode
 //    POWER_DOWN_MODE                     = 0xF
 };
 
-union mlx90394_osr_dig_filt
-{
-    rt_uint8_t byte_val;
-
-    struct
-    {
-        rt_uint8_t dig_filt_temp     : 3;
-        rt_uint8_t dig_filt_hall_xy  : 3;
-        rt_uint8_t osr_temp          : 1;
-        rt_uint8_t osr_hall          : 1;    //BIT7
-    };
-};
-
-union mlx90394_cust_ctrl
-{
-    rt_uint8_t byte_val;
-
-    struct
-    {
-        rt_uint8_t dig_filt_hall_z  : 3;
-        rt_uint8_t cust_ctrl3       : 1;
-        rt_uint8_t dnc3_1           : 1;
-        rt_uint8_t t_comp_en        : 1;
-        rt_uint8_t dnc2_0           : 1;
-        rt_uint8_t dnc1_1           : 1;    //BIT7
-    };
-};
-
-
 enum cmd
 {
     CMD_NOP               = 0x00,
