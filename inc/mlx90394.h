@@ -202,34 +202,6 @@ enum axis_flag
     T_FLAG = 0x1
 };
 
-/* Accelerometer full scale range */
-enum mlx90394_accel_range
-{
-    MPU6XXX_ACCEL_RANGE_2G  = 0, // ±2G
-    MPU6XXX_ACCEL_RANGE_4G  = 1, // ±4G
-    MPU6XXX_ACCEL_RANGE_8G  = 2, // ±8G
-    MPU6XXX_ACCEL_RANGE_16G = 3  // ±16G
-};
-
-/* sleep mode parameters */
-enum mlx90394_sleep
-{
-    MPU6XXX_SLEEP_DISABLE = 0,
-    MPU6XXX_SLEEP_ENABLE  = 1
-};
-
-/* Supported configuration items */
-enum mlx90394_cmd
-{
-    MPU6XXX_GYRO_RANGE,  /* Gyroscope full scale range */
-    MPU6XXX_ACCEL_RANGE, /* Accelerometer full scale range */
-    MPU6XXX_DLPF_CONFIG, /* Digital Low Pass Filter */
-    MPU6XXX_SAMPLE_RATE, /* Sample Rate —— 16-bit unsigned value.
-                            Sample Rate = [1000 -  4]HZ when dlpf is enable
-                            Sample Rate = [8000 - 32]HZ when dlpf is disable */
-    MPU6XXX_SLEEP        /* Sleep mode */
-};
-
 /** HALLCONF settings for CONF1 register. */
 typedef enum mlx90394_hallconf
 {
