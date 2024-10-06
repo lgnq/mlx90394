@@ -16,6 +16,12 @@
 #include <string.h>
 #include <stdlib.h>
 
+#define DBG_ENABLE
+#define DBG_SECTION_NAME "MLX90394"
+#define DBG_LEVEL DBG_INFO
+#define DBG_COLOR
+#include <rtdbg.h>
+
 /**
  * This function reads the value of register for mlx90394
  *
@@ -45,7 +51,7 @@ static rt_err_t mlx90394_mem_direct_read(struct mlx90394_device *dev, rt_uint8_t
         }
         else
         {
-            rt_kprintf("rt_i2c_transfer error\r\n");
+            LOG_E("rt_i2c_transfer error\r\n");
             res = -RT_ERROR;
         }
 #endif
@@ -89,7 +95,7 @@ static rt_err_t mlx90394_mem_read(struct mlx90394_device *dev, rt_uint8_t start_
         }
         else
         {
-            rt_kprintf("rt_i2c_transfer error\r\n");
+            LOG_E("rt_i2c_transfer error\r\n");
             res = -RT_ERROR;
         }
 #endif
@@ -128,7 +134,7 @@ static rt_err_t mlx90394_mem_write(struct mlx90394_device *dev, rt_uint8_t *send
         }
         else
         {
-            rt_kprintf("rt_i2c_transfer error\r\n");
+            LOG_E("rt_i2c_transfer error\r\n");
             res = -RT_ERROR;
         }
 #endif
@@ -161,7 +167,7 @@ static rt_err_t mlx90394_address_reset(struct mlx90394_device *dev)
         }
         else
         {
-            rt_kprintf("rt_i2c_transfer error\r\n");
+            LOG_E("rt_i2c_transfer error\r\n");
             res = -RT_ERROR;
         }
 #endif
@@ -180,7 +186,7 @@ rt_err_t mlx90394_reset(struct mlx90394_device *dev)
     res = mlx90394_mem_write(dev, send_buf, 2);
     if (res != RT_EOK)
     {
-        rt_kprintf("Reset error\r\n");
+        LOG_E("Reset error\r\n");
     }
 
     return res;
@@ -193,7 +199,7 @@ rt_err_t mlx90394_get_cid(struct mlx90394_device *dev, rt_uint8_t *cid)
     res = mlx90394_mem_read(dev, MLX90394_ADDR_CID, cid, 1);
     if (res != RT_EOK)
     {
-        rt_kprintf("Read CID is error\r\n");
+        LOG_E("Read CID is error\r\n");
     }
 
     return res;
@@ -206,7 +212,7 @@ rt_err_t mlx90394_get_did(struct mlx90394_device *dev, rt_uint8_t *did)
     res = mlx90394_mem_read(dev, MLX90394_ADDR_DID, did, 1);
     if (res != RT_EOK)
     {
-        rt_kprintf("Read DID is error\r\n");
+        LOG_E("Read DID is error\r\n");
     }
 
     return res;
@@ -219,11 +225,11 @@ static rt_err_t mlx90394_get_stat1(struct mlx90394_device *dev, union mlx90394_s
     res = mlx90394_mem_read(dev, MLX90394_ADDR_STAT1, (rt_uint8_t *)stat1, 1);
     if (res != RT_EOK)
     {
-        rt_kprintf("error\r\n");
+        LOG_E("error\r\n");
     }
     else
     {
-        rt_kprintf("STAT1 = 0x%x, DRDY = 0x%x\r\n", stat1->byte_val, stat1->drdy);
+        LOG_D("STAT1 = 0x%x, DRDY = 0x%x\r\n", stat1->byte_val, stat1->drdy);
     }
 
     return res;
@@ -236,11 +242,11 @@ static rt_err_t mlx90394_get_stat2(struct mlx90394_device *dev, union mlx90394_s
     res = mlx90394_mem_read(dev, MLX90394_ADDR_STAT2, (rt_uint8_t *)stat2, 1);
     if (res != RT_EOK)
     {
-        rt_kprintf("error\r\n");
+        LOG_E("error\r\n");
     }
     else
     {
-        rt_kprintf("STAT2 = 0x%x\r\n", stat2->byte_val);
+        LOG_D("STAT2 = 0x%x\r\n", stat2->byte_val);
     }
 
     return res;
@@ -253,11 +259,11 @@ static rt_err_t mlx90394_get_ctrl1(struct mlx90394_device *dev, mlx90394_ctrl1_t
     res = mlx90394_mem_read(dev, MLX90394_ADDR_CTRL1, (rt_uint8_t *)ctrl1, 1);
     if (res != RT_EOK)
     {
-        rt_kprintf("error\r\n");
+        LOG_E("error\r\n");
     }
     else
     {
-        rt_kprintf("CTRL1 = 0x%x\r\n", ctrl1->byte_val);
+        LOG_D("CTRL1 = 0x%x\r\n", ctrl1->byte_val);
     }
 
     return res;
@@ -273,7 +279,7 @@ rt_err_t mlx90394_set_ctrl1(struct mlx90394_device *dev, rt_uint8_t val)
     res = mlx90394_mem_write(dev, send_buf, 2);
     if (res != RT_EOK)
     {
-        rt_kprintf("Set CTRL1 error\r\n");
+        LOG_E("Set CTRL1 error\r\n");
     }
 
     return res;
@@ -286,11 +292,11 @@ static rt_err_t mlx90394_get_ctrl2(struct mlx90394_device *dev, mlx90394_ctrl2_t
     res = mlx90394_mem_read(dev, MLX90394_ADDR_CTRL2, (rt_uint8_t *)ctrl2, 1);
     if (res != RT_EOK)
     {
-        rt_kprintf("error\r\n");
+        LOG_E("error\r\n");
     }
     else
     {
-        rt_kprintf("CTRL2 = 0x%x\r\n", ctrl2->byte_val);
+        LOG_D("CTRL2 = 0x%x\r\n", ctrl2->byte_val);
     }
 
     return res;
@@ -306,7 +312,7 @@ rt_err_t mlx90394_set_ctrl2(struct mlx90394_device *dev, rt_uint8_t val)
     res = mlx90394_mem_write(dev, send_buf, 2);
     if (res != RT_EOK)
     {
-        rt_kprintf("Set CTRL2 error\r\n");
+        LOG_E("Set CTRL2 error\r\n");
     }
 
     return res;
@@ -319,11 +325,11 @@ static rt_err_t mlx90394_get_ctrl3(struct mlx90394_device *dev, mlx90394_ctrl3_t
     res = mlx90394_mem_read(dev, MLX90394_ADDR_CTRL3, (rt_uint8_t *)ctrl3, 1);
     if (res != RT_EOK)
     {
-        rt_kprintf("error\r\n");
+        LOG_E("error\r\n");
     }
     else
     {
-        rt_kprintf("CTRL3 = 0x%x\r\n", ctrl3->byte_val);
+        LOG_D("CTRL3 = 0x%x\r\n", ctrl3->byte_val);
     }
 
     return res;
@@ -339,7 +345,7 @@ rt_err_t mlx90394_set_ctrl3(struct mlx90394_device *dev, rt_uint8_t val)
     res = mlx90394_mem_write(dev, send_buf, 2);
     if (res != RT_EOK)
     {
-        rt_kprintf("Set CTRL3 error\r\n");
+        LOG_E("Set CTRL3 error\r\n");
     }
 
     return res;
@@ -352,11 +358,11 @@ static rt_err_t mlx90394_get_ctrl4(struct mlx90394_device *dev, mlx90394_ctrl4_t
     res = mlx90394_mem_read(dev, MLX90394_ADDR_CTRL4, (rt_uint8_t *)ctrl4, 1);
     if (res != RT_EOK)
     {
-        rt_kprintf("error\r\n");
+        LOG_E("error\r\n");
     }
     else
     {
-        rt_kprintf("CTRL4 = 0x%x\r\n", ctrl4->byte_val);
+        LOG_D("CTRL4 = 0x%x\r\n", ctrl4->byte_val);
     }
 
     return res;
@@ -372,7 +378,7 @@ rt_err_t mlx90394_set_ctrl4(struct mlx90394_device *dev, rt_uint8_t val)
     res = mlx90394_mem_write(dev, send_buf, 2);
     if (res != RT_EOK)
     {
-        rt_kprintf("Set CTRL4 error\r\n");
+        LOG_E("Set CTRL4 error\r\n");
     }
 
     return res;
@@ -437,7 +443,7 @@ rt_err_t mlx90394_get_mode(struct mlx90394_device *dev, rt_uint8_t *mode)
 
     if (res != RT_EOK)
     {
-        rt_kprintf("Read MODE is error\r\n");
+        LOG_E("Read MODE is error\r\n");
     }
 
     return res;
@@ -453,7 +459,7 @@ rt_err_t mlx90394_set_mode(struct mlx90394_device *dev, enum mlx90394_mode appli
     res = mlx90394_mem_read(dev, MLX90394_ADDR_CTRL1, &ctrl1.byte_val, 1);
     if (res != RT_EOK)
     {
-        rt_kprintf("set application mode error\r\n");
+        LOG_E("set application mode error\r\n");
     }
 
     ctrl1.mode = application_mode;
@@ -463,47 +469,47 @@ rt_err_t mlx90394_set_mode(struct mlx90394_device *dev, enum mlx90394_mode appli
     res = mlx90394_mem_write(dev, send_buf, 2);
     if (res != RT_EOK)
     {
-        rt_kprintf("set application mode error\r\n");
+        LOG_E("set application mode error\r\n");
     }
     else
     {
         switch (application_mode)
         {
         case POWER_DOWN_MODE:
-            rt_kprintf("POWER_DOWN_MODE\r\n");
+            LOG_D("POWER_DOWN_MODE\r\n");
             break;
         case SINGLE_MEASUREMENT_MODE:
-            rt_kprintf("SINGLE_MEASUREMENT_MODE\r\n");
+            LOG_D("SINGLE_MEASUREMENT_MODE\r\n");
             break;
         case CONTINUOUS_MEASUREMENT_MODE_10HZ:
-            rt_kprintf("CONTINUOUS_MEASUREMENT_MODE_10HZ\r\n");
+            LOG_D("CONTINUOUS_MEASUREMENT_MODE_10HZ\r\n");
             break;
         case CONTINUOUS_MEASUREMENT_MODE_15HZ:
-            rt_kprintf("CONTINUOUS_MEASUREMENT_MODE_15HZ\r\n");
+            LOG_D("CONTINUOUS_MEASUREMENT_MODE_15HZ\r\n");
             break;
         case CONTINUOUS_MEASUREMENT_MODE_50HZ:
-            rt_kprintf("CONTINUOUS_MEASUREMENT_MODE_50HZ\r\n");
+            LOG_D("CONTINUOUS_MEASUREMENT_MODE_50HZ\r\n");
             break;
         case CONTINUOUS_MEASUREMENT_MODE_100HZ:
-            rt_kprintf("CONTINUOUS_MEASUREMENT_MODE_100HZ\r\n");
+            LOG_D("CONTINUOUS_MEASUREMENT_MODE_100HZ\r\n");
             break;
         case CONTINUOUS_MEASUREMENT_MODE_200HZ:
-            rt_kprintf("CONTINUOUS_MEASUREMENT_MODE_200HZ\r\n");
+            LOG_D("CONTINUOUS_MEASUREMENT_MODE_200HZ\r\n");
             break;
         case CONTINUOUS_MEASUREMENT_MODE_500HZ:
-            rt_kprintf("CONTINUOUS_MEASUREMENT_MODE_500HZ\r\n");
+            LOG_D("CONTINUOUS_MEASUREMENT_MODE_500HZ\r\n");
             break;
         case CONTINUOUS_MEASUREMENT_MODE_700HZ:
-            rt_kprintf("CONTINUOUS_MEASUREMENT_MODE_700HZ\r\n");
+            LOG_D("CONTINUOUS_MEASUREMENT_MODE_700HZ\r\n");
             break;
         case CONTINUOUS_MEASUREMENT_MODE_1100HZ:
-            rt_kprintf("CONTINUOUS_MEASUREMENT_MODE_1100HZ");
+            LOG_D("CONTINUOUS_MEASUREMENT_MODE_1100HZ");
             break;
         case CONTINUOUS_MEASUREMENT_MODE_1400HZ:
-            rt_kprintf("CONTINUOUS_MEASUREMENT_MODE_1400HZ");
+            LOG_D("CONTINUOUS_MEASUREMENT_MODE_1400HZ");
             break;
         default:
-            rt_kprintf("unknown application mode\r\n");
+            LOG_D("unknown application mode\r\n");
             break;
         }
     }
@@ -671,43 +677,43 @@ static rt_err_t mlx90394_continuous_measurement(struct mlx90394_device *dev, str
     switch (freq)
     {
     case 10:
-        rt_kprintf("10Hz");
+        LOG_D("10Hz");
         status = mlx90394_set_mode(dev, CONTINUOUS_MEASUREMENT_MODE_10HZ);
         break;
     case 20:
-        rt_kprintf("15Hz");
+        LOG_D("15Hz");
         status = mlx90394_set_mode(dev, CONTINUOUS_MEASUREMENT_MODE_15HZ);
         break;
     case 50:
-        rt_kprintf("50Hz");
+        LOG_D("50Hz");
         status = mlx90394_set_mode(dev, CONTINUOUS_MEASUREMENT_MODE_50HZ);
         break;
     case 100:
-        rt_kprintf("100Hz");
+        LOG_D("100Hz");
         status = mlx90394_set_mode(dev, CONTINUOUS_MEASUREMENT_MODE_100HZ);
         break;
     case 200:
-        rt_kprintf("200Hz");
+        LOG_D("200Hz");
         status = mlx90394_set_mode(dev, CONTINUOUS_MEASUREMENT_MODE_200HZ);
         break;
     case 500:
-        rt_kprintf("500Hz");
+        LOG_D("500Hz");
         status = mlx90394_set_mode(dev, CONTINUOUS_MEASUREMENT_MODE_500HZ);
         break;
     case 700:
-        rt_kprintf("700Hz");
+        LOG_D("700Hz");
         status = mlx90394_set_mode(dev, CONTINUOUS_MEASUREMENT_MODE_700HZ);
         break;
     case 1100:
-        rt_kprintf("1100Hz");
+        LOG_D("1100Hz");
         status = mlx90394_set_mode(dev, CONTINUOUS_MEASUREMENT_MODE_1100HZ);
         break;
     case 1400:
-        rt_kprintf("1400Hz");
+        LOG_D("1400Hz");
         status = mlx90394_set_mode(dev, CONTINUOUS_MEASUREMENT_MODE_1400HZ);
         break;
     default:
-        rt_kprintf("wrong frequency\r\n");
+        LOG_D("wrong frequency\r\n");
         break;
     }
 
@@ -738,7 +744,7 @@ rt_err_t mlx90394_single_measurement(struct mlx90394_device *dev, struct mlx9039
     while (stat1.drdy == 0)
     {
         status = mlx90394_get_stat1(dev, &stat1);
-        rt_thread_delay(100);
+        rt_thread_mdelay(10);
     }
 
     status = mlx90394_get_xyz(dev, xyz);
@@ -763,14 +769,14 @@ struct mlx90394_device *mlx90394_init(const char *dev_name, rt_uint8_t param)
     dev = rt_calloc(1, sizeof(struct mlx90394_device));
     if (dev == RT_NULL)
     {
-        rt_kprintf("Can't allocate memory for mlx90394 device on '%s' ", dev_name);
+        LOG_E("Can't allocate memory for mlx90394 device on '%s' ", dev_name);
         goto __exit;
     }
 
     dev->bus = rt_device_find(dev_name);
     if (dev->bus == RT_NULL)
     {
-        rt_kprintf("Can't find device:'%s'", dev_name);
+        LOG_E("Can't find device:'%s'", dev_name);
         goto __exit;
     }
 
@@ -791,23 +797,23 @@ struct mlx90394_device *mlx90394_init(const char *dev_name, rt_uint8_t param)
 
         if (mlx90394_mem_read(dev, 0x0A, id, 2) != RT_EOK)
         {
-            rt_kprintf("Can't find device at '%s'!", dev_name);
+            LOG_E("Can't find device at '%s'!", dev_name);
             goto __exit;
         }
         else
         {
-            rt_kprintf("CID is 0x%x\r\n", id[0]);
-            rt_kprintf("DID is 0x%x\r\n", id[1]);
+            LOG_D("CID is 0x%x\r\n", id[0]);
+            LOG_D("DID is 0x%x\r\n", id[1]);
 
             mlx90394_set_mode(dev, SINGLE_MEASUREMENT_MODE);
         }
 
-        rt_kprintf("Device i2c address is:'0x%x'!\r\n", dev->i2c_addr);
+        LOG_D("Device i2c address is:'0x%x'!\r\n", dev->i2c_addr);
 #endif        
     }
     else
     {
-        rt_kprintf("Unsupported device:'%s'!", dev_name);
+        LOG_E("Unsupported device:'%s'!", dev_name);
         goto __exit;
     }
 
@@ -840,18 +846,18 @@ static void mlx90394(int argc, char **argv)
     /* If the number of arguments less than 2 */
     if (argc < 2)
     {
-        rt_kprintf("\n");
-        rt_kprintf("mlx90394 [OPTION] [PARAM]\n");
-        rt_kprintf("         probe <dev_name>      Probe mlx90394 by given name, ex:i2c2\n");
-        rt_kprintf("         id                    Print CID and DID\n");
-        rt_kprintf("         stat1                 Print stat1\n");
-        rt_kprintf("                               var = [0 - 3] means [250 - 2000DPS]\n");
-        rt_kprintf("         ar <var>              Set accel range to var\n");
-        rt_kprintf("                               var = [0 - 3] means [2 - 16G]\n");
-        rt_kprintf("         sleep <var>           Set sleep status\n");
-        rt_kprintf("                               var = 0 means disable, = 1 means enable\n");
-        rt_kprintf("         read [num]            read [num] times mlx90394\n");
-        rt_kprintf("                               num default 5\n");
+        LOG_D("\n");
+        LOG_D("mlx90394 [OPTION] [PARAM]\n");
+        LOG_D("         probe <dev_name>      Probe mlx90394 by given name, ex:i2c2\n");
+        LOG_D("         id                    Print CID and DID\n");
+        LOG_D("         stat1                 Print stat1\n");
+        LOG_D("                               var = [0 - 3] means [250 - 2000DPS]\n");
+        LOG_D("         ar <var>              Set accel range to var\n");
+        LOG_D("                               var = [0 - 3] means [2 - 16G]\n");
+        LOG_D("         sleep <var>           Set sleep status\n");
+        LOG_D("                               var = 0 means disable, = 1 means enable\n");
+        LOG_D("         read [num]            read [num] times mlx90394\n");
+        LOG_D("                               num default 5\n");
         return;
     }
     else
@@ -870,7 +876,7 @@ static void mlx90394(int argc, char **argv)
         }
         else if (dev == RT_NULL)
         {
-            rt_kprintf("Please probe mlx90394 first!\n");
+            LOG_E("Please probe mlx90394 first!\n");
             return;
         }
         else if (!strcmp(argv[1], "id"))
@@ -880,8 +886,8 @@ static void mlx90394(int argc, char **argv)
             rt_uint8_t len = 2;
 
             mlx90394_mem_read(dev, start_addr, id, len);
-            rt_kprintf("CID = 0x%x\r\n", id[0]);
-            rt_kprintf("DID = 0x%x\r\n", id[1]);
+            LOG_D("CID = 0x%x\r\n", id[0]);
+            LOG_D("DID = 0x%x\r\n", id[1]);
         }
         else if (!strcmp(argv[1], "stat1"))
         {
@@ -898,14 +904,14 @@ static void mlx90394(int argc, char **argv)
             float t;
 
             mlx90394_get_temperature(dev, &t);
-            rt_kprintf("t = %d.%d\r\n", (rt_int16_t)t, (rt_uint16_t)(t*100)%100);
+            LOG_D("t = %d.%d\r\n", (rt_int16_t)t, (rt_uint16_t)(t*100)%100);
         }
         else if (!strcmp(argv[1], "rr"))
         {
             rt_uint8_t val;
             mlx90394_mem_read(dev, atoi(argv[2]), &val, 1);
 
-            rt_kprintf("Reading REG[%d] = 0x%x...\r\n", atoi(argv[2]), val);
+            LOG_D("Reading REG[%d] = 0x%x...\r\n", atoi(argv[2]), val);
         }
         else if (!strcmp(argv[1], "setup"))
         {
@@ -917,9 +923,9 @@ static void mlx90394(int argc, char **argv)
 
 //            mlx90394_single_measurement(dev, &xyz);
             mlx90394_get_xyz_flux(dev, &xyz);
-            rt_kprintf("x = %d.%d\r\n", (rt_int16_t)xyz.x, (rt_int16_t)(xyz.x*10)%10);
-            rt_kprintf("y = %d.%d\r\n", (rt_int16_t)xyz.y, (rt_int16_t)(xyz.y*10)%10);
-            rt_kprintf("z = %d.%d\r\n", (rt_int16_t)xyz.z, (rt_int16_t)(xyz.z*10)%10);
+            LOG_D("x = %d.%d\r\n", (rt_int16_t)xyz.x, (rt_int16_t)(xyz.x*10)%10);
+            LOG_D("y = %d.%d\r\n", (rt_int16_t)xyz.y, (rt_int16_t)(xyz.y*10)%10);
+            LOG_D("z = %d.%d\r\n", (rt_int16_t)xyz.z, (rt_int16_t)(xyz.z*10)%10);
         }
         else if (!strcmp(argv[1], "continuous"))
         {
@@ -932,7 +938,7 @@ static void mlx90394(int argc, char **argv)
         }
         else
         {
-            rt_kprintf("Unknown command, please enter 'mlx90394' get help information!\n");
+            LOG_E("Unknown command, please enter 'mlx90394' get help information!\n");
         }
     }
 }
