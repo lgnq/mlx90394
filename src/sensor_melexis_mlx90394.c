@@ -212,7 +212,7 @@ int rt_hw_mlx90394_init(const char *name, struct rt_sensor_config *cfg)
         sensor_mps->info.type       = RT_SENSOR_CLASS_MAG;
         sensor_mps->info.vendor     = RT_SENSOR_VENDOR_MELEXIS;
         sensor_mps->info.model      = "mlx90394";
-        sensor_mps->info.unit       = RT_SENSOR_UNIT_MG;
+        sensor_mps->info.unit       = RT_SENSOR_UNIT_MGAUSS;
         sensor_mps->info.intf_type  = RT_SENSOR_INTF_I2C;
         sensor_mps->info.range_max  = 16000;
         sensor_mps->info.range_min  = 2000;
