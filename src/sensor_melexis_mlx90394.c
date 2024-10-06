@@ -238,3 +238,75 @@ __exit:
 
     return -RT_ERROR;
 }
+
+#if 1
+static void read_mps_entry(void *parameter)
+{
+    rt_device_t dev = RT_NULL;
+    struct rt_sensor_data sensor_data;
+    rt_size_t res;
+
+    dev = rt_device_find(parameter);
+    if (dev == RT_NULL)
+    {
+        rt_kprintf("Can't find device:%s\n", parameter);
+        return;
+    }
+
+    if (rt_device_open(dev, RT_DEVICE_FLAG_RDWR) != RT_EOK)
+    {
+        rt_kprintf("open device failed!\n");
+        return;
+    }
+
+//    rt_device_control(dev, RT_SENSOR_CTRL_SET_ODR, (void *)100);
+
+    while (1)
+    {
+        res = rt_device_read(dev, 0, &sensor_data, 1);
+        if (res != 1)
+        {
+            rt_kprintf("read data failed!size is %d\n", res);
+            rt_device_close(dev);
+            return;
+        }
+        else
+        {
+            rt_kprintf("$%d %d %d;", sensor_data.data.mag.x, sensor_data.data.mag.y, sensor_data.data.mag.z);
+        }
+
+        rt_thread_mdelay(10);
+    }
+}
+
+static int mlx90394_app_init(void)
+{
+    rt_thread_t mlx90394_thread;
+
+    mlx90394_thread = rt_thread_create("mlx90394", read_mps_entry, "mag_mps", 1024, RT_THREAD_PRIORITY_MAX / 2, 20);
+    if (mlx90394_thread != RT_NULL)
+    {
+        rt_thread_startup(mlx90394_thread);
+
+        return 0;
+    }
+
+    return -1;
+}
+INIT_APP_EXPORT(mlx90394_app_init);
+
+int rt_hw_mlx90394_port(void)
+{
+    struct rt_sensor_config cfg;
+
+    cfg.intf.dev_name  = "i2c2";
+    cfg.intf.user_data = (void *)0x10;
+//    cfg.irq_pin.pin = RT_PIN_NONE;
+
+    rt_hw_mlx90394_init("mps", &cfg);
+
+    return 0;
+}
+INIT_ENV_EXPORT(rt_hw_mlx90394_port);
+#endif
+
