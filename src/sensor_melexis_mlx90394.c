@@ -300,7 +300,7 @@ int rt_hw_mlx90394_port(void)
     struct rt_sensor_config cfg;
 
     cfg.intf.dev_name  = "i2c2";
-    cfg.intf.user_data = (void *)0x10;
+    cfg.intf.user_data = (void *)MLX90394_I2C_ADDRESS;
 //    cfg.irq_pin.pin = RT_PIN_NONE;
 
     rt_hw_mlx90394_init("mps", &cfg);
