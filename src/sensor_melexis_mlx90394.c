@@ -172,10 +172,9 @@ static rt_err_t mlx90394_control(struct rt_sensor_device *sensor, int cmd, void 
         break;
     case RT_SENSOR_CTRL_SELF_TEST:
         break;
-    case mlx90394_CTRL_NOP:
-        result = _mlx90394_nop(sensor);
+    case RT_SENSOR_CTRL_USER_CMD_NOP:
         break;
-    case mlx90394_CTRL_RESET:
+    case RT_SENSOR_CTRL_USER_CMD_RESET:
         result = _mlx90394_reset(sensor);
         break;
     default:

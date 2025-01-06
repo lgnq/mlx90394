@@ -14,8 +14,11 @@
 #include "sensor.h"
 #include "mlx90394.h"
 
-#define mlx90394_CTRL_NOP                       0x10
-#define mlx90394_CTRL_RESET                     0x11
+enum
+{
+    RT_SENSOR_CTRL_USER_CMD_NOP = 0x101,
+    RT_SENSOR_CTRL_USER_CMD_RESET,
+};
 
 int rt_hw_mlx90394_init(const char *name, struct rt_sensor_config *cfg);
 
