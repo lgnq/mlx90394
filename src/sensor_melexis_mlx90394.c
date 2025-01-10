@@ -70,6 +70,9 @@ rt_err_t mlx90394_get_info(rt_sensor_t sensor)
     rt_uint8_t cid;
     rt_uint8_t did;
     mlx90394_ctrl1_t ctrl1;
+    mlx90394_ctrl2_t ctrl2;
+    mlx90394_ctrl3_t ctrl3;
+    mlx90394_ctrl4_t ctrl4;
 
     struct mlx90394_device *dev = ((struct mlx90394_device *)sensor->parent.user_data);
 
@@ -81,13 +84,20 @@ rt_err_t mlx90394_get_info(rt_sensor_t sensor)
 
     res  = mlx90394_get_cid(dev, &cid);
     res += mlx90394_get_did(dev, &did);
+
     res += mlx90394_get_ctrl1(dev, &ctrl1);
+    res += mlx90394_get_ctrl2(dev, &ctrl2);
+    res += mlx90394_get_ctrl3(dev, &ctrl3);
+    res += mlx90394_get_ctrl4(dev, &ctrl4);
 
     rt_kprintf("cid:%x\n", cid);
     rt_kprintf("did:%x\n", did);
     rt_kprintf("xonoff:%x\n", ctrl1.x_en);
     rt_kprintf("yonoff:%x\n", ctrl1.y_en);
     rt_kprintf("zonoff:%x\n", ctrl1.z_en);
+    rt_kprintf("tonoff:%x\n", ctrl4.t_en);
+    rt_kprintf("osrhall:%x\n", ctrl3.osr_hall);
+    rt_kprintf("osrtemp:%x\n", ctrl3.osr_temp);
 
     return res;
 }
