@@ -98,6 +98,7 @@ rt_err_t mlx90394_get_info(rt_sensor_t sensor)
     rt_kprintf("tonoff:%x\n", ctrl4.t_en);
     rt_kprintf("osrhall:%x\n", ctrl3.osr_hall);
     rt_kprintf("osrtemp:%x\n", ctrl3.osr_temp);
+    rt_kprintf("mode:%x\n", ctrl1.mode);
 
     return res;
 }
