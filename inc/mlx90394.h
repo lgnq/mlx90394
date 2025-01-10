@@ -19,10 +19,20 @@
 #define MLX90394    MLX90394RLD_AAA_001
 
 #if MLX90394 == MLX90394RLD_AAA_000
-#define MLX90394_I2C_ADDRESS                    (0x10)        // default for mlx90394
+#define MLX90394_I2C_ADDRESS                    (0x10)        // address pin A0,A1 low (GND), default for mlx90394
+
+/**
+ * @brief Magneto 10 magnetic flux resolution.
+ * @details Specified resolution for magnetic flux of Magneto 10 Click driver.
+ */
 #define MAGNETO10_MAG_FLUX_RESOLUTION   0.15    //uT/LSB
 #elif MLX90394 == MLX90394RLD_AAA_001
-#define MLX90394_I2C_ADDRESS                    (0x60)        // default for mlx90394
+#define MLX90394_I2C_ADDRESS                    (0x60)        // address pin A0,A1 low (GND), default for mlx90394
+
+/**
+ * @brief Magneto 10 magnetic flux resolution.
+ * @details Specified resolution for magnetic flux of Magneto 10 Click driver.
+ */
 #define MAGNETO10_MAG_FLUX_RESOLUTION   1.5     //uT/LSB
 #endif
 
@@ -169,6 +179,35 @@ enum mlx90394_mode
 //    POWER_DOWN_MODE                     = 0xF
 };
 
+union mlx90394_osr_dig_filt
+{
+    rt_uint8_t byte_val;
+
+    struct
+    {
+        rt_uint8_t dig_filt_temp     : 3;
+        rt_uint8_t dig_filt_hall_xy  : 3;
+        rt_uint8_t osr_temp          : 1;
+        rt_uint8_t osr_hall          : 1;    //BIT7
+    };
+};
+
+union mlx90394_cust_ctrl
+{
+    rt_uint8_t byte_val;
+
+    struct
+    {
+        rt_uint8_t dig_filt_hall_z  : 3;
+        rt_uint8_t cust_ctrl3       : 1;
+        rt_uint8_t dnc3_1           : 1;
+        rt_uint8_t t_comp_en        : 1;
+        rt_uint8_t dnc2_0           : 1;
+        rt_uint8_t dnc1_1           : 1;    //BIT7
+    };
+};
+
+
 enum cmd
 {
     CMD_NOP               = 0x00,
@@ -283,4 +322,5 @@ rt_err_t mlx90394_reset(struct mlx90394_device *dev);
 rt_err_t mlx90394_get_gain_sel(struct mlx90394_device *dev, mlx90394_gain_t *gain);
 rt_err_t mlx90394_get_resolution(struct mlx90394_device *dev, mlx90394_resolution_t *res_x, mlx90394_resolution_t *res_y, mlx90394_resolution_t *res_z);
 
+rt_err_t mlx90394_single_measurement(struct mlx90394_device *dev, struct mlx90394_xyz_flux *xyz);
 #endif
