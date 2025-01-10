@@ -319,6 +319,10 @@ rt_err_t mlx90394_get_cid(struct mlx90394_device *dev, rt_uint8_t *cid);
 rt_err_t mlx90394_get_did(struct mlx90394_device *dev, rt_uint8_t *did);
 
 rt_err_t mlx90394_get_ctrl1(struct mlx90394_device *dev, mlx90394_ctrl1_t *ctrl1);
+rt_err_t mlx90394_get_ctrl2(struct mlx90394_device *dev, mlx90394_ctrl2_t *ctrl2);
+rt_err_t mlx90394_get_ctrl3(struct mlx90394_device *dev, mlx90394_ctrl3_t *ctrl3);
+rt_err_t mlx90394_get_ctrl4(struct mlx90394_device *dev, mlx90394_ctrl4_t *ctrl4);
+
 rt_err_t mlx90394_set_mode(struct mlx90394_device *dev, enum mlx90394_mode application_mode);
 
 rt_err_t mlx90394_nop(struct mlx90394_device *dev);
