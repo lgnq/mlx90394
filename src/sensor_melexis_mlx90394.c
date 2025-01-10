@@ -107,6 +107,29 @@ static rt_err_t _mlx90394_set_power(rt_sensor_t sensor, rt_uint8_t power)
     }
 }
 
+rt_err_t mlx90394_get_info(rt_sensor_t sensor)
+{
+    rt_err_t result = RT_EOK;
+    rt_uint8_t cid;
+    rt_uint8_t did;
+
+    struct mlx90394_device *dev = ((struct mlx90394_device *)sensor->parent.user_data);
+
+    if (mlx_dev == RT_NULL)
+    {
+        rt_kprintf("Please probe mlx90394 first!\n");
+        return -1;
+    }
+
+    mlx90394_get_cid(dev, &cid);
+    mlx90394_get_did(dev, &did);
+
+    rt_kprintf("cid:%x\n", cid);
+    rt_kprintf("did:%x\n", did);
+
+    return result;
+}
+
 static rt_size_t _mlx90394_polling_get_data(rt_sensor_t sensor, struct rt_sensor_data *data)
 {
     if (sensor->info.type == RT_SENSOR_CLASS_MAG)
@@ -167,6 +190,9 @@ static rt_err_t mlx90394_control(struct rt_sensor_device *sensor, int cmd, void 
         break;
     case RT_SENSOR_CTRL_USER_CMD_RESET:
         result = mlx90394_reset((struct mlx90394_device *)sensor->parent.user_data);
+        break;
+    case RT_SENSOR_CTRL_USER_CMD_INFO:
+        result = mlx90394_get_info(sensor);
         break;
     default:
         return -RT_ERROR;
