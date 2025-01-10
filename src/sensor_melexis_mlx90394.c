@@ -63,20 +63,6 @@ static rt_err_t _mlx90394_set_range(rt_sensor_t sensor, rt_int32_t range)
     return RT_EOK;
 }
 
-static rt_err_t _mlx90394_acc_set_mode(rt_sensor_t sensor, rt_uint8_t mode)
-{
-    if (mode == RT_SENSOR_MODE_POLLING)
-    {
-        LOG_D("set mode to POLLING");
-    }
-    else
-    {
-        LOG_D("Unsupported mode, code is %d", mode);
-        return -RT_ERROR;
-    }
-    return RT_EOK;
-}
-
 static rt_err_t _mlx90394_set_power(rt_sensor_t sensor, rt_uint8_t power)
 {
     static rt_uint8_t ref_count = 0;
@@ -182,7 +168,7 @@ static rt_err_t mlx90394_control(struct rt_sensor_device *sensor, int cmd, void 
         result = -RT_EINVAL;
         break;
     case RT_SENSOR_CTRL_SET_MODE:
-        result = _mlx90394_acc_set_mode(sensor, (rt_uint32_t)args & 0xff);
+        result = mlx90394_set_mode((struct mlx90394_device *)sensor->parent.user_data, (rt_uint32_t)args & 0xff);
         break;
     case RT_SENSOR_CTRL_SET_POWER:
         result = _mlx90394_set_power(sensor, (rt_uint32_t)args & 0xff);
