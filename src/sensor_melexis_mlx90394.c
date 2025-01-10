@@ -89,7 +89,7 @@ static rt_err_t _mlx90394_set_power(rt_sensor_t sensor, rt_uint8_t power)
         if (ref_count == 0)
         {
             LOG_D("set power down");
-            return mlx90394_set_param(mlx_dev, MPU6XXX_SLEEP, MPU6XXX_SLEEP_ENABLE);
+//            return mlx90394_set_param(mlx_dev, MPU6XXX_SLEEP, MPU6XXX_SLEEP_ENABLE);
         }
         return RT_EOK;
     }
@@ -97,7 +97,7 @@ static rt_err_t _mlx90394_set_power(rt_sensor_t sensor, rt_uint8_t power)
     {
         ref_count ++;
         LOG_D("set power normal");
-        return mlx90394_set_param(mlx_dev, MPU6XXX_SLEEP, MPU6XXX_SLEEP_DISABLE);
+//        return mlx90394_set_param(mlx_dev, MPU6XXX_SLEEP, MPU6XXX_SLEEP_DISABLE);
     }
     else
     {
@@ -106,24 +106,23 @@ static rt_err_t _mlx90394_set_power(rt_sensor_t sensor, rt_uint8_t power)
     }
 }
 
-static rt_err_t _mlx90394_nop(rt_sensor_t sensor)
-{
-    mlx90394_nop((struct mlx90394_device *)sensor->parent.user_data);
-}
-
 static rt_err_t _mlx90394_reset(rt_sensor_t sensor)
 {
     mlx90394_reset((struct mlx90394_device *)sensor->parent.user_data);
+
+    return RT_EOK;
 }
 
 static rt_size_t _mlx90394_polling_get_data(rt_sensor_t sensor, struct rt_sensor_data *data)
 {
     if (sensor->info.type == RT_SENSOR_CLASS_MAG)
     {
-        struct mlx90394_xyz xyz;
+        struct mlx90394_xyz_flux xyz;
 
         if (mlx90394_single_measurement((struct mlx90394_device *)sensor->parent.user_data, &xyz) != RT_EOK)
         {
+            rt_kprintf("mlx90394_single_measurement error\r\n");
+
             return 0;
         }
 
@@ -172,8 +171,6 @@ static rt_err_t mlx90394_control(struct rt_sensor_device *sensor, int cmd, void 
         break;
     case RT_SENSOR_CTRL_SELF_TEST:
         break;
-    case RT_SENSOR_CTRL_USER_CMD_NOP:
-        break;
     case RT_SENSOR_CTRL_USER_CMD_RESET:
         result = _mlx90394_reset(sensor);
         break;
@@ -211,7 +208,7 @@ int rt_hw_mlx90394_init(const char *name, struct rt_sensor_config *cfg)
         sensor_mps->info.type       = RT_SENSOR_CLASS_MAG;
         sensor_mps->info.vendor     = RT_SENSOR_VENDOR_MELEXIS;
         sensor_mps->info.model      = "mlx90394";
-        sensor_mps->info.unit       = RT_SENSOR_UNIT_MGAUSS;
+        sensor_mps->info.unit       = RT_SENSOR_UNIT_MG;
         sensor_mps->info.intf_type  = RT_SENSOR_INTF_I2C;
         sensor_mps->info.range_max  = 16000;
         sensor_mps->info.range_min  = 2000;
@@ -238,7 +235,20 @@ __exit:
     return -RT_ERROR;
 }
 
-#if 1
+int rt_hw_mlx90394_port(void)
+{
+    struct rt_sensor_config cfg;
+
+    cfg.intf.dev_name  = "i2c2";
+    cfg.intf.user_data = (void *)MLX90394_I2C_ADDRESS;
+//    cfg.irq_pin.pin = RT_PIN_NONE;
+
+    rt_hw_mlx90394_init("mps", &cfg);
+
+    return 0;
+}
+INIT_ENV_EXPORT(rt_hw_mlx90394_port);
+
 static void read_mps_entry(void *parameter)
 {
     rt_device_t dev = RT_NULL;
@@ -271,41 +281,82 @@ static void read_mps_entry(void *parameter)
         }
         else
         {
-            rt_kprintf("$%d %d %d;", sensor_data.data.mag.x, sensor_data.data.mag.y, sensor_data.data.mag.z);
+            rt_kprintf("data:%d,%d,%d\n", sensor_data.data.mag.x, sensor_data.data.mag.y, sensor_data.data.mag.z);
         }
 
         rt_thread_mdelay(10);
     }
 }
 
-static int mlx90394_app_init(void)
+rt_err_t mlx90394_measurement_onoff(int argc, char **argv)
 {
     rt_thread_t mlx90394_thread;
 
-    mlx90394_thread = rt_thread_create("mlx90394", read_mps_entry, "mag_mps", 1024, RT_THREAD_PRIORITY_MAX / 2, 20);
-    if (mlx90394_thread != RT_NULL)
+    if (!strcmp(argv[1], "on"))
     {
-        rt_thread_startup(mlx90394_thread);
+        mlx90394_thread = rt_thread_create("mlx90394", read_mps_entry, "mag_mps", 1024, RT_THREAD_PRIORITY_MAX / 2, 20);
+        if (mlx90394_thread != RT_NULL)
+        {
+            rt_thread_startup(mlx90394_thread);
 
-        return 0;
+            return 0;
+        }
+    }
+    else if (!strcmp(argv[1], "off"))
+    {
+        mlx90394_thread = rt_thread_find("mlx90394");
+
+        if (mlx90394_thread != RT_NULL)
+        {
+            rt_thread_delete(mlx90394_thread);
+
+            return 0;
+        }
     }
 
     return -1;
 }
-INIT_APP_EXPORT(mlx90394_app_init);
 
-int rt_hw_mlx90394_port(void)
+rt_err_t mlx90394_ops_ctrl(int argc, char **argv)
 {
-    struct rt_sensor_config cfg;
+    rt_size_t res = RT_EOK;
+    rt_device_t dev = RT_NULL;
 
-    cfg.intf.dev_name  = "i2c2";
-    cfg.intf.user_data = (void *)MLX90394_I2C_ADDRESS;
-//    cfg.irq_pin.pin = RT_PIN_NONE;
+    rt_uint16_t p = atoi(argv[2]);
 
-    rt_hw_mlx90394_init("mps", &cfg);
+    dev = rt_device_find("mag_mps");
+    if (dev == RT_NULL)
+    {
+        rt_kprintf("Can't find device:%s\n");
+        return -RT_ERROR;
+    }
 
-    return 0;
+    res = rt_device_open(dev, RT_DEVICE_FLAG_RDWR);
+    if (res != RT_EOK)
+    {
+        if (res == -RT_EBUSY)
+        {
+            rt_kprintf("device is already opened!\n");
+        }
+        else
+        {
+            rt_kprintf("open device failed!\n");
+            return -RT_ERROR;
+        }
+    }
+
+    if (rt_device_control(dev, atoi(argv[1]), &p))
+    {
+        rt_kprintf("device control set failed, 0x%x 0x%x!\n", atoi(argv[1]), atoi(argv[2]));
+        return -RT_ERROR;
+    }
+
+    return res;
 }
-INIT_ENV_EXPORT(rt_hw_mlx90394_port);
+
+#ifdef FINSH_USING_MSH
+    MSH_CMD_EXPORT(mlx90394_measurement_onoff, mlx90394 sensor function);
+//    MSH_CMD_EXPORT(mlx90394_ctrl_set_sample_freq, mlx90394 sensor function);
+    MSH_CMD_EXPORT(mlx90394_ops_ctrl, mlx90394 sensor function);
 #endif
 
