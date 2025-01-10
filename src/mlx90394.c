@@ -623,11 +623,6 @@ rt_err_t mlx90394_get_xyz_flux(struct mlx90394_device *dev, struct mlx90394_xyz_
     rt_err_t res = RT_EOK;
     rt_uint8_t recv_buf[6];
 
-    while (mlx90394_is_data_ready(dev) == RT_FALSE)
-    {
-        rt_thread_delay(100);
-    }
-
     res = mlx90394_mem_read(dev, 0x1, recv_buf, 6);
     if (res == RT_EOK)
     {
