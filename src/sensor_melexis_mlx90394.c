@@ -99,6 +99,11 @@ rt_err_t mlx90394_get_info(rt_sensor_t sensor)
     rt_kprintf("osrhall:%x\n", ctrl3.osr_hall);
     rt_kprintf("osrtemp:%x\n", ctrl3.osr_temp);
     rt_kprintf("mode:%x\n", ctrl1.mode);
+    rt_kprintf("range:%x\n", ctrl2.config);
+    rt_kprintf("digfltxy:%x\n", ctrl3.dig_filt_hall_xy);
+    rt_kprintf("digfltz:%x\n", ctrl4.dig_filt_hall_z);
+    rt_kprintf("digflttemp:%x\n", ctrl3.dig_filt_temp);
+    rt_kprintf("wocmode:%x\n", ctrl2.woc_mode);
 
     return res;
 }
