@@ -16,8 +16,8 @@
 
 enum
 {
-    RT_SENSOR_CTRL_USER_CMD_NOP = 0x101,
-    RT_SENSOR_CTRL_USER_CMD_RESET,
+    RT_SENSOR_CTRL_USER_CMD_RESET = 0x101,
+    RT_SENSOR_CTRL_USER_CMD_INFO,
 };
 
 int rt_hw_mlx90394_init(const char *name, struct rt_sensor_config *cfg);

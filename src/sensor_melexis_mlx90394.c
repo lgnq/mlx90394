@@ -107,13 +107,6 @@ static rt_err_t _mlx90394_set_power(rt_sensor_t sensor, rt_uint8_t power)
     }
 }
 
-static rt_err_t _mlx90394_reset(rt_sensor_t sensor)
-{
-    mlx90394_reset((struct mlx90394_device *)sensor->parent.user_data);
-
-    return RT_EOK;
-}
-
 static rt_size_t _mlx90394_polling_get_data(rt_sensor_t sensor, struct rt_sensor_data *data)
 {
     if (sensor->info.type == RT_SENSOR_CLASS_MAG)
@@ -173,7 +166,7 @@ static rt_err_t mlx90394_control(struct rt_sensor_device *sensor, int cmd, void 
     case RT_SENSOR_CTRL_SELF_TEST:
         break;
     case RT_SENSOR_CTRL_USER_CMD_RESET:
-        result = _mlx90394_reset(sensor);
+        result = mlx90394_reset((struct mlx90394_device *)sensor->parent.user_data);
         break;
     default:
         return -RT_ERROR;
