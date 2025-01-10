@@ -258,13 +258,13 @@ static void read_mps_entry(void *parameter)
     dev = rt_device_find(parameter);
     if (dev == RT_NULL)
     {
-        rt_kprintf("Can't find device:%s\n", parameter);
+        LOG_E("Can't find device:%s\n", parameter);
         return;
     }
 
     if (rt_device_open(dev, RT_DEVICE_FLAG_RDWR) != RT_EOK)
     {
-        rt_kprintf("open device failed!\n");
+        LOG_E("open device failed!\n");
         return;
     }
 
@@ -275,7 +275,7 @@ static void read_mps_entry(void *parameter)
         res = rt_device_read(dev, 0, &sensor_data, 1);
         if (res != 1)
         {
-            rt_kprintf("read data failed!size is %d\n", res);
+            LOG_E("read data failed!size is %d\n", res);
             rt_device_close(dev);
             return;
         }
@@ -327,7 +327,7 @@ rt_err_t mlx90394_ops_ctrl(int argc, char **argv)
     dev = rt_device_find("mag_mps");
     if (dev == RT_NULL)
     {
-        rt_kprintf("Can't find device:%s\n");
+        LOG_E("Can't find device:%s\n");
         return -RT_ERROR;
     }
 
@@ -336,18 +336,18 @@ rt_err_t mlx90394_ops_ctrl(int argc, char **argv)
     {
         if (res == -RT_EBUSY)
         {
-            rt_kprintf("device is already opened!\n");
+            LOG_E("device is already opened!\n");
         }
         else
         {
-            rt_kprintf("open device failed!\n");
+            LOG_E("open device failed!\n");
             return -RT_ERROR;
         }
     }
 
     if (rt_device_control(dev, atoi(argv[1]), &p))
     {
-        rt_kprintf("device control set failed, 0x%x 0x%x!\n", atoi(argv[1]), atoi(argv[2]));
+        LOG_E("device control set failed, 0x%x 0x%x!\n", atoi(argv[1]), atoi(argv[2]));
         return -RT_ERROR;
     }
 
