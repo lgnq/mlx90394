@@ -256,7 +256,7 @@ static rt_err_t mlx90394_get_stat2(struct mlx90394_device *dev, union mlx90394_s
     return res;
 }
 
-static rt_err_t mlx90394_get_ctrl1(struct mlx90394_device *dev, mlx90394_ctrl1_t *ctrl1)
+rt_err_t mlx90394_get_ctrl1(struct mlx90394_device *dev, mlx90394_ctrl1_t *ctrl1)
 {
     rt_err_t res = RT_EOK;
 
