@@ -813,7 +813,7 @@ static rt_err_t mlx90394_continuous_measurement(struct mlx90394_device *dev, str
     return status;
 }
 
-rt_err_t mlx90394_single_measurement(struct mlx90394_device *dev, struct mlx90394_xyz *xyz)
+rt_err_t mlx90394_single_measurement(struct mlx90394_device *dev, struct mlx90394_xyz_flux *xyz)
 {
     rt_uint8_t status = RT_EOK;
     union mlx90394_stat1 stat1;
@@ -824,10 +824,10 @@ rt_err_t mlx90394_single_measurement(struct mlx90394_device *dev, struct mlx9039
     while (stat1.drdy == 0)
     {
         status = mlx90394_get_stat1(dev, &stat1);
-        rt_thread_mdelay(10);
+        rt_thread_delay(100);
     }
 
-    status = mlx90394_get_xyz(dev, xyz);
+    status = mlx90394_get_xyz_flux(dev, xyz);
 
     return status;
 }
