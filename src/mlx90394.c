@@ -804,7 +804,7 @@ static rt_err_t mlx90394_continuous_measurement(struct mlx90394_device *dev, str
         if (stat1.drdy == 1)
         {
             status = mlx90394_get_xyz(dev, xyz);
-            rt_kprintf("$%d %d %d;", xyz->x, xyz->y, xyz->z);
+            LOG_I("data%d,%d,%d\n", xyz->x, xyz->y, xyz->z);
         }
 
         rt_thread_delay(100);
