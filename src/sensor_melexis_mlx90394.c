@@ -279,7 +279,7 @@ static void read_mps_entry(void *parameter)
         else
         {
             LOG_E("open device failed!\n");
-            return -RT_ERROR;
+            return;
         }
     }
 
