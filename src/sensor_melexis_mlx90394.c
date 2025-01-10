@@ -63,36 +63,6 @@ static rt_err_t _mlx90394_set_range(rt_sensor_t sensor, rt_int32_t range)
     return RT_EOK;
 }
 
-static rt_err_t _mlx90394_set_power(rt_sensor_t sensor, rt_uint8_t power)
-{
-    static rt_uint8_t ref_count = 0;
-
-    if (power == RT_SENSOR_POWER_DOWN)
-    {
-        if (ref_count > 0)
-        {
-            ref_count --;
-        }
-        if (ref_count == 0)
-        {
-            LOG_D("set power down");
-//            return mlx90394_set_param(mlx_dev, MPU6XXX_SLEEP, MPU6XXX_SLEEP_ENABLE);
-        }
-        return RT_EOK;
-    }
-    else if (power == RT_SENSOR_POWER_NORMAL)
-    {
-        ref_count ++;
-        LOG_D("set power normal");
-//        return mlx90394_set_param(mlx_dev, MPU6XXX_SLEEP, MPU6XXX_SLEEP_DISABLE);
-    }
-    else
-    {
-        LOG_W("Unsupported mode, code is %d", power);
-        return -RT_ERROR;
-    }
-}
-
 rt_err_t mlx90394_get_info(rt_sensor_t sensor)
 {
     rt_err_t res = RT_EOK;
@@ -171,7 +141,6 @@ static rt_err_t mlx90394_control(struct rt_sensor_device *sensor, int cmd, void 
         result = mlx90394_set_mode((struct mlx90394_device *)sensor->parent.user_data, (rt_uint32_t)args & 0xff);
         break;
     case RT_SENSOR_CTRL_SET_POWER:
-        result = _mlx90394_set_power(sensor, (rt_uint32_t)args & 0xff);
         break;
     case RT_SENSOR_CTRL_SELF_TEST:
         break;
