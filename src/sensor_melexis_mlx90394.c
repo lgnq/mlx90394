@@ -262,10 +262,18 @@ static void read_mps_entry(void *parameter)
         return;
     }
 
-    if (rt_device_open(dev, RT_DEVICE_FLAG_RDWR) != RT_EOK)
+    res = rt_device_open(dev, RT_DEVICE_FLAG_RDWR);
+    if (res != RT_EOK)
     {
-        LOG_E("open device failed!\n");
-        return;
+        if (res == -RT_EBUSY)
+        {
+            LOG_E("device is already opened!\n");
+        }
+        else
+        {
+            LOG_E("open device failed!\n");
+            return -RT_ERROR;
+        }
     }
 
 //    rt_device_control(dev, RT_SENSOR_CTRL_SET_ODR, (void *)100);
