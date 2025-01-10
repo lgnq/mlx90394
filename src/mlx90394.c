@@ -188,6 +188,10 @@ rt_err_t mlx90394_reset(struct mlx90394_device *dev)
     {
         LOG_E("Reset error\r\n");
     }
+    else
+    {
+        LOG_I("Reset MLX90394 is done\r\n");
+    }
 
     return res;
 }
@@ -804,7 +808,7 @@ static rt_err_t mlx90394_continuous_measurement(struct mlx90394_device *dev, str
         if (stat1.drdy == 1)
         {
             status = mlx90394_get_xyz(dev, xyz);
-            LOG_I("data%d,%d,%d\n", xyz->x, xyz->y, xyz->z);
+            rt_kprintf("data%d,%d,%d\n", xyz->x, xyz->y, xyz->z);
         }
 
         rt_thread_delay(100);
