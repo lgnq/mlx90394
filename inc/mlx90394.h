@@ -315,6 +315,12 @@ struct mlx90394_device *mlx90394_init(const char *dev_name, rt_uint8_t param);
  */
 void mlx90394_deinit(struct mlx90394_device *dev);
 
+rt_err_t mlx90394_get_cid(struct mlx90394_device *dev, rt_uint8_t *cid);
+rt_err_t mlx90394_get_did(struct mlx90394_device *dev, rt_uint8_t *did);
+
+rt_err_t mlx90394_get_ctrl1(struct mlx90394_device *dev, mlx90394_ctrl1_t *ctrl1);
+rt_err_t mlx90394_set_mode(struct mlx90394_device *dev, enum mlx90394_mode application_mode);
+
 rt_err_t mlx90394_nop(struct mlx90394_device *dev);
 rt_err_t mlx90394_exit(struct mlx90394_device *dev);
 rt_err_t mlx90394_reset(struct mlx90394_device *dev);
