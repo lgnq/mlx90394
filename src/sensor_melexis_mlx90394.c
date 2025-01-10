@@ -115,7 +115,7 @@ rt_err_t mlx90394_get_info(rt_sensor_t sensor)
 
     struct mlx90394_device *dev = ((struct mlx90394_device *)sensor->parent.user_data);
 
-    if (mlx_dev == RT_NULL)
+    if (dev == RT_NULL)
     {
         rt_kprintf("Please probe mlx90394 first!\n");
         return -1;
