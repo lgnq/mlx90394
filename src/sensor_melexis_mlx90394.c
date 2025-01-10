@@ -109,7 +109,8 @@ static rt_err_t _mlx90394_set_power(rt_sensor_t sensor, rt_uint8_t power)
 
 rt_err_t mlx90394_get_info(rt_sensor_t sensor)
 {
-    rt_err_t result = RT_EOK;
+    rt_err_t res = RT_EOK;
+
     rt_uint8_t cid;
     rt_uint8_t did;
 
@@ -118,16 +119,16 @@ rt_err_t mlx90394_get_info(rt_sensor_t sensor)
     if (dev == RT_NULL)
     {
         rt_kprintf("Please probe mlx90394 first!\n");
-        return -1;
+        return -RT_ERROR;
     }
 
-    mlx90394_get_cid(dev, &cid);
-    mlx90394_get_did(dev, &did);
+    res  = mlx90394_get_cid(dev, &cid);
+    res += mlx90394_get_did(dev, &did);
 
     rt_kprintf("cid:%x\n", cid);
     rt_kprintf("did:%x\n", did);
 
-    return result;
+    return res;
 }
 
 static rt_size_t _mlx90394_polling_get_data(rt_sensor_t sensor, struct rt_sensor_data *data)
