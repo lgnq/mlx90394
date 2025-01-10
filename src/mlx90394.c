@@ -289,7 +289,7 @@ rt_err_t mlx90394_set_ctrl1(struct mlx90394_device *dev, rt_uint8_t val)
     return res;
 }
 
-static rt_err_t mlx90394_get_ctrl2(struct mlx90394_device *dev, mlx90394_ctrl2_t *ctrl2)
+rt_err_t mlx90394_get_ctrl2(struct mlx90394_device *dev, mlx90394_ctrl2_t *ctrl2)
 {
     rt_err_t res = RT_EOK;
 
@@ -322,7 +322,7 @@ rt_err_t mlx90394_set_ctrl2(struct mlx90394_device *dev, rt_uint8_t val)
     return res;
 }
 
-static rt_err_t mlx90394_get_ctrl3(struct mlx90394_device *dev, mlx90394_ctrl3_t *ctrl3)
+rt_err_t mlx90394_get_ctrl3(struct mlx90394_device *dev, mlx90394_ctrl3_t *ctrl3)
 {
     rt_err_t res = RT_EOK;
 
@@ -355,7 +355,7 @@ rt_err_t mlx90394_set_ctrl3(struct mlx90394_device *dev, rt_uint8_t val)
     return res;
 }
 
-static rt_err_t mlx90394_get_ctrl4(struct mlx90394_device *dev, mlx90394_ctrl4_t *ctrl4)
+rt_err_t mlx90394_get_ctrl4(struct mlx90394_device *dev, mlx90394_ctrl4_t *ctrl4)
 {
     rt_err_t res = RT_EOK;
 
