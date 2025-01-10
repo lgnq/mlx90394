@@ -882,13 +882,13 @@ struct mlx90394_device *mlx90394_init(const char *dev_name, rt_uint8_t param)
         }
         else
         {
-            LOG_D("CID is 0x%x\r\n", id[0]);
-            LOG_D("DID is 0x%x\r\n", id[1]);
+            LOG_I("CID is 0x%x\r\n", id[0]);
+            LOG_I("DID is 0x%x\r\n", id[1]);
 
             mlx90394_set_mode(dev, SINGLE_MEASUREMENT_MODE);
         }
 
-        LOG_D("Device i2c address is:'0x%x'!\r\n", dev->i2c_addr);
+        LOG_I("Device i2c address is:'0x%x'!\r\n", dev->i2c_addr);
 #endif        
     }
     else
