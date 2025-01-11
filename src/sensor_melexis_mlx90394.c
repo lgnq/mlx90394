@@ -188,6 +188,15 @@ static rt_err_t mlx90394_control(struct rt_sensor_device *sensor, int cmd, void 
     case RT_SENSOR_CTRL_USER_CMD_SET_RANGE:
         result = mlx90394_set_range(mlx_dev, *(rt_uint16_t *)args & 0xff);
         break;
+    case RT_SENSOR_CTRL_USER_CMD_SET_FILT_XY:
+        result = mlx90394_set_dig_filt_xy(mlx_dev, *(rt_uint16_t *)args & 0xff);
+        break;
+    case RT_SENSOR_CTRL_USER_CMD_SET_FILT_Z:
+        result = mlx90394_set_dig_filt_z(mlx_dev, *(rt_uint16_t *)args & 0xff);
+        break;
+    case RT_SENSOR_CTRL_USER_CMD_SET_FILT_T:
+        result = mlx90394_set_dig_filt_t(mlx_dev, *(rt_uint16_t *)args & 0xff);
+        break;
     default:
         return -RT_ERROR;
     }

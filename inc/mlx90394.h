@@ -267,19 +267,6 @@ typedef enum mlx90394_resolution
     mlx90394_RES_19,
 } mlx90394_resolution_t;
 
-/** Digital filter settings for CONF3 register. */
-typedef enum mlx90394_filter
-{
-    mlx90394_FILTER_0,
-    mlx90394_FILTER_1,
-    mlx90394_FILTER_2,
-    mlx90394_FILTER_3,
-    mlx90394_FILTER_4,
-    mlx90394_FILTER_5,
-    mlx90394_FILTER_6,
-    mlx90394_FILTER_7,
-} mlx90394_filter_t;
-
 /** Oversampling settings for CONF3 register. */
 typedef enum mlx90394_oversampling
 {
@@ -339,6 +326,13 @@ rt_err_t mlx90394_get_mode(struct mlx90394_device *dev, rt_uint8_t *mode);
 rt_err_t mlx90394_set_mode(struct mlx90394_device *dev, enum mlx90394_mode application_mode);
 rt_err_t mlx90394_get_range(struct mlx90394_device *dev, rt_uint8_t *range);
 rt_err_t mlx90394_set_range(struct mlx90394_device *dev, enum mlx90394_range range);
+rt_err_t mlx90394_get_dig_filt_xy(struct mlx90394_device *dev, uint8_t *dig_filt);
+rt_err_t mlx90394_set_dig_filt_xy(struct mlx90394_device *dev, uint8_t dig_filt);
+rt_err_t mlx90394_get_dig_filt_z(struct mlx90394_device *dev, uint8_t *dig_filt);
+rt_err_t mlx90394_set_dig_filt_z(struct mlx90394_device *dev, uint8_t dig_filt);
+rt_err_t mlx90394_get_dig_filt_t(struct mlx90394_device *dev, uint8_t *dig_filt);
+rt_err_t mlx90394_set_dig_filt_t(struct mlx90394_device *dev, uint8_t dig_filt);
+
 rt_err_t mlx90394_nop(struct mlx90394_device *dev);
 rt_err_t mlx90394_exit(struct mlx90394_device *dev);
 rt_err_t mlx90394_reset(struct mlx90394_device *dev);
