@@ -28,6 +28,8 @@ enum
     RT_SENSOR_CTRL_USER_CMD_SET_FILT_Z,
     RT_SENSOR_CTRL_USER_CMD_SET_FILT_T,
     RT_SENSOR_CTRL_USER_CMD_SET_WOC_MODE,
+    RT_SENSOR_CTRL_USER_CMD_SET_OSR_HALL,
+    RT_SENSOR_CTRL_USER_CMD_SET_OSR_TEMP,
 };
 
 int rt_hw_mlx90394_init(const char *name, struct rt_sensor_config *cfg);
