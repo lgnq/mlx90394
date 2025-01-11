@@ -264,8 +264,6 @@ static void read_mps_entry(void *parameter)
         }
     }
 
-//    rt_device_control(dev, RT_SENSOR_CTRL_SET_ODR, (void *)100);
-
     while (1)
     {
         res = rt_device_read(dev, 0, &sensor_data, 1);
