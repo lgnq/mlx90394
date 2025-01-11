@@ -436,7 +436,7 @@ rt_err_t mlx90394_get_temperature(struct mlx90394_device *dev, float *t)
     return res;
 }
 
-rt_err_t mlx90394_set_xonoff(struct mlx90394_device *dev, rt_uint8_t xonoff)
+rt_err_t mlx90394_set_xonoff(struct mlx90394_device *dev, rt_uint8_t onoff)
 {
     rt_err_t res = RT_EOK;
     rt_uint8_t send_buf[2];
@@ -449,7 +449,7 @@ rt_err_t mlx90394_set_xonoff(struct mlx90394_device *dev, rt_uint8_t xonoff)
         LOG_E("read CTRL1 error\r\n");
     }
 
-    ctrl1.x_en = xonoff;
+    ctrl1.x_en = onoff;
 
     send_buf[0] = MLX90394_ADDR_CTRL1;
     send_buf[1] = ctrl1.byte_val;
@@ -457,6 +457,84 @@ rt_err_t mlx90394_set_xonoff(struct mlx90394_device *dev, rt_uint8_t xonoff)
     if (res != RT_EOK)
     {
         LOG_E("set x enabled failed\r\n");
+    }
+
+    return res;
+}
+
+rt_err_t mlx90394_set_yonoff(struct mlx90394_device *dev, rt_uint8_t onoff)
+{
+    rt_err_t res = RT_EOK;
+    rt_uint8_t send_buf[2];
+
+    mlx90394_ctrl1_t ctrl1;
+
+    res = mlx90394_mem_read(dev, MLX90394_ADDR_CTRL1, &ctrl1.byte_val, 1);
+    if (res != RT_EOK)
+    {
+        LOG_E("read CTRL1 error\r\n");
+    }
+
+    ctrl1.y_en = onoff;
+
+    send_buf[0] = MLX90394_ADDR_CTRL1;
+    send_buf[1] = ctrl1.byte_val;
+    res = mlx90394_mem_write(dev, send_buf, 2);
+    if (res != RT_EOK)
+    {
+        LOG_E("set y enabled failed\r\n");
+    }
+
+    return res;
+}
+
+rt_err_t mlx90394_set_zonoff(struct mlx90394_device *dev, rt_uint8_t onoff)
+{
+    rt_err_t res = RT_EOK;
+    rt_uint8_t send_buf[2];
+
+    mlx90394_ctrl1_t ctrl1;
+
+    res = mlx90394_mem_read(dev, MLX90394_ADDR_CTRL1, &ctrl1.byte_val, 1);
+    if (res != RT_EOK)
+    {
+        LOG_E("read CTRL1 error\r\n");
+    }
+
+    ctrl1.z_en = onoff;
+
+    send_buf[0] = MLX90394_ADDR_CTRL1;
+    send_buf[1] = ctrl1.byte_val;
+    res = mlx90394_mem_write(dev, send_buf, 2);
+    if (res != RT_EOK)
+    {
+        LOG_E("set z enabled failed\r\n");
+    }
+
+    return res;
+}
+
+rt_err_t mlx90394_set_tonoff(struct mlx90394_device *dev, rt_uint8_t onoff)
+{
+    rt_err_t res = RT_EOK;
+    rt_uint8_t send_buf[2];
+
+    mlx90394_ctrl4_t ctrl4;
+
+    res = mlx90394_mem_read(dev, MLX90394_ADDR_CTRL4, &ctrl4.byte_val, 1);
+    if (res != RT_EOK)
+    {
+        LOG_E("read CTRL4 error\r\n");
+    }
+
+    ctrl4.t_en = onoff;
+
+    send_buf[0] = MLX90394_ADDR_CTRL4;
+    send_buf[1] = ctrl4.byte_val;
+    res = mlx90394_mem_write(dev, send_buf, 2);
+    if (res != RT_EOK)
+    {
+        LOG_E("set t enabled failed\r\n");
     }
 
     return res;
