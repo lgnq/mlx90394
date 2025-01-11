@@ -639,30 +639,89 @@ rt_err_t mlx90394_set_range(struct mlx90394_device *dev, enum mlx90394_range ran
     return res;
 }
 
-rt_err_t mlx90394_get_osr_dig_filt(struct mlx90394_device *dev, union mlx90394_osr_dig_filt *val)
+rt_err_t mlx90394_get_osr_hall(struct mlx90394_device *dev, uint8_t *val)
 {
     rt_err_t res = RT_EOK;
+    mlx90394_ctrl3_t ctrl3;
 
-    res = mlx90394_mem_read(dev, 0x14, (rt_uint8_t *)val, 1);
+    res = mlx90394_mem_read(dev, MLX90394_ADDR_CTRL3, &ctrl3.byte_val, 1);
     if (res != RT_EOK)
     {
-        LOG_E("Get OSR_DIG_FILT error\r\n");
+        LOG_E("Read CTRL3 failed\r\n");
+        return res;
+    }
+
+    *val = ctrl3.osr_hall;
+
+    return res;
+}
+
+rt_err_t mlx90394_set_osr_hall(struct mlx90394_device *dev, uint8_t val)
+{
+    rt_err_t res = RT_EOK;
+    rt_uint8_t send_buf[2];
+
+    mlx90394_ctrl3_t ctrl3;
+
+    res = mlx90394_mem_read(dev, MLX90394_ADDR_CTRL3, &ctrl3.byte_val, 1);
+    if (res != RT_EOK)
+    {
+        LOG_E("read CTRL3 failed\r\n");
+        return res;
+    }
+
+    ctrl3.osr_hall = val;
+
+    send_buf[0] = MLX90394_ADDR_CTRL3;
+    send_buf[1] = ctrl3.byte_val;
+    res = mlx90394_mem_write(dev, send_buf, 2);
+    if (res != RT_EOK)
+    {
+        LOG_E("set OST_HALL failed\r\n");
     }
 
     return res;
 }
 
-rt_err_t mlx90394_set_osr_dig_filt(struct mlx90394_device *dev, union mlx90394_osr_dig_filt val)
+rt_err_t mlx90394_get_osr_temp(struct mlx90394_device *dev, uint8_t *val)
+{
+    rt_err_t res = RT_EOK;
+    mlx90394_ctrl3_t ctrl3;
+
+    res = mlx90394_mem_read(dev, MLX90394_ADDR_CTRL3, &ctrl3.byte_val, 1);
+    if (res != RT_EOK)
+    {
+        LOG_E("Read CTRL3 failed\r\n");
+        return res;
+    }
+
+    *val = ctrl3.osr_temp;
+
+    return res;
+}
+
+rt_err_t mlx90394_set_osr_temp(struct mlx90394_device *dev, uint8_t val)
 {
     rt_err_t res = RT_EOK;
     rt_uint8_t send_buf[2];
 
-    send_buf[0] = 0x14;
-    send_buf[1] = val.byte_val;
+    mlx90394_ctrl3_t ctrl3;
+
+    res = mlx90394_mem_read(dev, MLX90394_ADDR_CTRL3, &ctrl3.byte_val, 1);
+    if (res != RT_EOK)
+    {
+        LOG_E("read CTRL3 failed\r\n");
+        return res;
+    }
+
+    ctrl3.osr_temp = val;
+
+    send_buf[0] = MLX90394_ADDR_CTRL3;
+    send_buf[1] = ctrl3.byte_val;
     res = mlx90394_mem_write(dev, send_buf, 2);
     if (res != RT_EOK)
     {
-        LOG_E("Set OSR_DIG_FILT error\r\n");
+        LOG_E("set OSR_TEMP failed\r\n");
     }
 
     return res;
