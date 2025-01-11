@@ -153,30 +153,31 @@ static rt_err_t mlx90394_control(struct rt_sensor_device *sensor, int cmd, void 
         *(rt_uint8_t *)args = mlx_dev->id;
         break;
     case RT_SENSOR_CTRL_SET_RANGE:
-        result = _mlx90394_set_range(sensor, (rt_int32_t)args);
+        result = _mlx90394_set_range(sensor, *(rt_int16_t *)args);
         break;
     case RT_SENSOR_CTRL_SET_ODR:
         result = -RT_EINVAL;
         break;
     case RT_SENSOR_CTRL_SET_MODE:
-        result = mlx90394_set_mode((struct mlx90394_device *)sensor->parent.user_data, (rt_uint32_t)args & 0xff);
+        result = mlx90394_set_mode(mlx_dev, *(rt_uint16_t *)args & 0xff);
         break;
     case RT_SENSOR_CTRL_SET_POWER:
         break;
     case RT_SENSOR_CTRL_SELF_TEST:
         break;
     case RT_SENSOR_CTRL_USER_CMD_RESET:
-        result = mlx90394_reset((struct mlx90394_device *)sensor->parent.user_data);
+        result = mlx90394_reset(mlx_dev);
         break;
     case RT_SENSOR_CTRL_USER_CMD_INFO:
         result = mlx90394_get_info(sensor);
         break;
     case RT_SENSOR_CTRL_USER_CMD_XONOFF:
-        result = mlx90394_set_xonoff((struct mlx90394_device *)sensor->parent.user_data, *(rt_uint16_t *)args & 0xff);
+        result = mlx90394_set_xonoff(mlx_dev, *(rt_uint16_t *)args & 0xff);
         break;
     default:
         return -RT_ERROR;
     }
+
     return result;
 }
 
