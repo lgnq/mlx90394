@@ -788,9 +788,9 @@ rt_err_t mlx90394_get_xyz_flux(struct mlx90394_device *dev, struct mlx90394_xyz_
     res = mlx90394_mem_read(dev, 0x1, recv_buf, 6);
     if (res == RT_EOK)
     {
-        xyz->x = (float)(((rt_int16_t)recv_buf[1] << 8) | recv_buf[0]) * (dev->sensitivity);
-        xyz->y = (float)(((rt_int16_t)recv_buf[3] << 8) | recv_buf[2]) * (dev->sensitivity);
-        xyz->z = (float)(((rt_int16_t)recv_buf[5] << 8) | recv_buf[4]) * (dev->sensitivity);
+        xyz->x = ((rt_int16_t)((recv_buf[1] << 8) | recv_buf[0])) * (dev->sensitivity);
+        xyz->y = ((rt_int16_t)((recv_buf[3] << 8) | recv_buf[2])) * (dev->sensitivity);
+        xyz->z = ((rt_int16_t)((recv_buf[5] << 8) | recv_buf[4])) * (dev->sensitivity);
     }
 
     return res;
