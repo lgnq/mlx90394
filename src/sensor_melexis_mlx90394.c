@@ -24,45 +24,6 @@ static struct mlx90394_device *_mlx90394_init(struct rt_sensor_intf *intf)
     return mlx90394_init(intf->dev_name, i2c_addr);
 }
 
-static rt_err_t _mlx90394_set_range(rt_sensor_t sensor, rt_int32_t range)
-{
-//    if (sensor->info.type == RT_SENSOR_CLASS_ACCE)
-//    {
-//        rt_uint8_t range_ctr;
-//
-//        if (range < 2000)
-//            range_ctr = MPU6XXX_ACCEL_RANGE_2G;
-//        else if (range < 4000)
-//            range_ctr = MPU6XXX_ACCEL_RANGE_4G;
-//        else if (range < 8000)
-//            range_ctr = MPU6XXX_ACCEL_RANGE_8G;
-//        else
-//            range_ctr = MPU6XXX_ACCEL_RANGE_16G;
-//
-//        LOG_D("acce set range %d", range_ctr);
-//
-//        return mlx90394_set_param(mpu_dev, MPU6XXX_ACCEL_RANGE, range_ctr);
-//    }
-//    else if (sensor->info.type == RT_SENSOR_CLASS_GYRO)
-//    {
-//        rt_uint8_t range_ctr;
-//
-//        if (range < 250000UL)
-//            range_ctr = MPU6XXX_GYRO_RANGE_250DPS;
-//        else if (range < 500000UL)
-//            range_ctr = MPU6XXX_GYRO_RANGE_500DPS;
-//        else if (range < 1000000UL)
-//            range_ctr = MPU6XXX_GYRO_RANGE_1000DPS;
-//        else
-//            range_ctr = MPU6XXX_GYRO_RANGE_2000DPS;
-//
-//        LOG_D("gyro set range %d", range);
-//
-//        return mlx90394_set_param(mpu_dev, MPU6XXX_GYRO_RANGE, range_ctr);
-//    }
-    return RT_EOK;
-}
-
 rt_err_t mlx90394_get_info(rt_sensor_t sensor)
 {
     rt_err_t res = RT_EOK;
@@ -153,7 +114,6 @@ static rt_err_t mlx90394_control(struct rt_sensor_device *sensor, int cmd, void 
         *(rt_uint8_t *)args = mlx_dev->id;
         break;
     case RT_SENSOR_CTRL_SET_RANGE:
-        result = _mlx90394_set_range(sensor, *(rt_int16_t *)args);
         break;
     case RT_SENSOR_CTRL_SET_ODR:
         result = -RT_EINVAL;
