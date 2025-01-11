@@ -112,7 +112,7 @@ typedef union
     uint8_t intrepb       : 1;
     uint8_t intb_scl_b    : 1;
     uint8_t intdur        : 2;
-    uint8_t config        : 2;
+    uint8_t range_config  : 2;
   };
   uint8_t byte_val;
 } mlx90394_ctrl2_t;
