@@ -370,20 +370,6 @@ static rt_bool_t mlx90394_is_data_ready(struct mlx90394_device *dev)
     }
 }
 
-rt_err_t mlx90394_get_t(struct mlx90394_device *dev, rt_int16_t *t)
-{
-    rt_err_t res = RT_EOK;
-    rt_uint8_t recv_buf[2];
-
-    res = mlx90394_mem_read(dev, 0x8, recv_buf, 2);
-    if (res == RT_EOK)
-    {
-        *t = recv_buf[1]<<8 | recv_buf[0];
-    }
-
-    return res;
-}
-
 rt_err_t mlx90394_get_temperature(struct mlx90394_device *dev, float *t)
 {
     rt_err_t res = RT_EOK;
