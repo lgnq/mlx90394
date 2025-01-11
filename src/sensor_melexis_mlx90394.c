@@ -78,7 +78,7 @@ rt_err_t mlx90394_get_info(rt_sensor_t sensor)
 
     if (dev == RT_NULL)
     {
-        rt_kprintf("Please probe mlx90394 first!\n");
+        LOG_E("Please probe mlx90394 first!\n");
         return -RT_ERROR;
     }
 
@@ -116,7 +116,7 @@ static rt_size_t _mlx90394_polling_get_data(rt_sensor_t sensor, struct rt_sensor
 
         if (mlx90394_single_measurement((struct mlx90394_device *)sensor->parent.user_data, &xyz) != RT_EOK)
         {
-            rt_kprintf("mlx90394_single_measurement error\r\n");
+            LOG_E("mlx90394_single_measurement error\r\n");
 
             return 0;
         }
