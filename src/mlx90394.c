@@ -1082,18 +1082,18 @@ static void mlx90394(int argc, char **argv)
     /* If the number of arguments less than 2 */
     if (argc < 2)
     {
-        LOG_D("\n");
-        LOG_D("mlx90394 [OPTION] [PARAM]\n");
-        LOG_D("         probe <dev_name>      Probe mlx90394 by given name, ex:i2c2\n");
-        LOG_D("         id                    Print CID and DID\n");
-        LOG_D("         stat1                 Print stat1\n");
-        LOG_D("                               var = [0 - 3] means [250 - 2000DPS]\n");
-        LOG_D("         ar <var>              Set accel range to var\n");
-        LOG_D("                               var = [0 - 3] means [2 - 16G]\n");
-        LOG_D("         sleep <var>           Set sleep status\n");
-        LOG_D("                               var = 0 means disable, = 1 means enable\n");
-        LOG_D("         read [num]            read [num] times mlx90394\n");
-        LOG_D("                               num default 5\n");
+        LOG_I("\n");
+        LOG_I("mlx90394 [OPTION] [PARAM]\n");
+        LOG_I("         probe <dev_name>      Probe mlx90394 by given name, ex:i2c2\n");
+        LOG_I("         id                    Print CID and DID\n");
+        LOG_I("         stat1                 Print stat1\n");
+        LOG_I("                               var = [0 - 3] means [250 - 2000DPS]\n");
+        LOG_I("         ar <var>              Set accel range to var\n");
+        LOG_I("                               var = [0 - 3] means [2 - 16G]\n");
+        LOG_I("         sleep <var>           Set sleep status\n");
+        LOG_I("                               var = 0 means disable, = 1 means enable\n");
+        LOG_I("         read [num]            read [num] times mlx90394\n");
+        LOG_I("                               num default 5\n");
         return;
     }
     else
@@ -1122,8 +1122,8 @@ static void mlx90394(int argc, char **argv)
             rt_uint8_t len = 2;
 
             mlx90394_mem_read(dev, start_addr, id, len);
-            LOG_D("CID = 0x%x\r\n", id[0]);
-            LOG_D("DID = 0x%x\r\n", id[1]);
+            LOG_I("CID = 0x%x\r\n", id[0]);
+            LOG_I("DID = 0x%x\r\n", id[1]);
         }
         else if (!strcmp(argv[1], "stat1"))
         {
@@ -1139,15 +1139,16 @@ static void mlx90394(int argc, char **argv)
         {
             float t;
 
+            mlx90394_set_mode(dev, SINGLE_MEASUREMENT_MODE);
             mlx90394_get_temperature(dev, &t);
-            LOG_D("t = %d.%d\r\n", (rt_int16_t)t, (rt_uint16_t)(t*100)%100);
+            LOG_I("t = %d.%d\r\n", (rt_int16_t)t, (rt_uint16_t)(t*100)%100);
         }
         else if (!strcmp(argv[1], "rr"))
         {
             rt_uint8_t val;
             mlx90394_mem_read(dev, atoi(argv[2]), &val, 1);
 
-            LOG_D("Reading REG[%d] = 0x%x...\r\n", atoi(argv[2]), val);
+            LOG_I("Reading REG[%d] = 0x%x...\r\n", atoi(argv[2]), val);
         }
         else if (!strcmp(argv[1], "setup"))
         {
@@ -1157,11 +1158,11 @@ static void mlx90394(int argc, char **argv)
         {
             struct mlx90394_xyz_flux xyz;
 
-//            mlx90394_single_measurement(dev, &xyz);
-            mlx90394_get_xyz_flux(dev, &xyz);
-            LOG_D("x = %d.%d\r\n", (rt_int16_t)xyz.x, (rt_int16_t)(xyz.x*10)%10);
-            LOG_D("y = %d.%d\r\n", (rt_int16_t)xyz.y, (rt_int16_t)(xyz.y*10)%10);
-            LOG_D("z = %d.%d\r\n", (rt_int16_t)xyz.z, (rt_int16_t)(xyz.z*10)%10);
+            mlx90394_single_measurement(dev, &xyz);
+
+            LOG_I("x = %d.%d\r\n", (rt_int16_t)xyz.x, (rt_int16_t)(xyz.x*10)%10);
+            LOG_I("y = %d.%d\r\n", (rt_int16_t)xyz.y, (rt_int16_t)(xyz.y*10)%10);
+            LOG_I("z = %d.%d\r\n", (rt_int16_t)xyz.z, (rt_int16_t)(xyz.z*10)%10);
         }
         else if (!strcmp(argv[1], "continuous"))
         {
