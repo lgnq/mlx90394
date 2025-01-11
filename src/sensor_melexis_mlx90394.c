@@ -201,6 +201,7 @@ static rt_err_t mlx90394_control(struct rt_sensor_device *sensor, int cmd, void 
         result = mlx90394_set_woc_mode(mlx_dev, *(rt_uint16_t *)args & 0xff);
         break;
     default:
+        LOG_E("unknown RT_SENSOR_CTRL command\r\n");
         return -RT_ERROR;
     }
 
