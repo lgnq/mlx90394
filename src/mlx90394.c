@@ -757,6 +757,49 @@ rt_err_t mlx90394_get_oversampling(struct mlx90394_device *dev, mlx90394_oversam
     return res;
 }
 
+rt_err_t mlx90394_get_woc_mode(struct mlx90394_device *dev, uint8_t *mode)
+{
+    rt_err_t res = RT_EOK;
+    mlx90394_ctrl2_t ctrl2;
+
+    res = mlx90394_mem_read(dev, MLX90394_ADDR_CTRL2, &ctrl2.byte_val, 1);
+
+    *mode = ctrl2.woc_mode;
+
+    if (res != RT_EOK)
+    {
+        LOG_E("Read WOC_MODE failed\r\n");
+    }
+
+    return res;
+}
+
+rt_err_t mlx90394_set_woc_mode(struct mlx90394_device *dev, uint8_t mode)
+{
+    rt_err_t res = RT_EOK;
+    rt_uint8_t send_buf[2];
+
+    mlx90394_ctrl2_t ctrl2;
+
+    res = mlx90394_mem_read(dev, MLX90394_ADDR_CTRL2, &ctrl2.byte_val, 1);
+    if (res != RT_EOK)
+    {
+        LOG_E("read ctrl2 failed\r\n");
+    }
+
+    ctrl2.woc_mode = mode;
+
+    send_buf[0] = MLX90394_ADDR_CTRL2;
+    send_buf[1] = ctrl2.byte_val;
+    res = mlx90394_mem_write(dev, send_buf, 2);
+    if (res != RT_EOK)
+    {
+        LOG_E("set WOC_MODE failed\r\n");
+    }
+
+    return res;
+}
+
 rt_err_t mlx90394_get_dig_filt_xy(struct mlx90394_device *dev, uint8_t *dig_filt)
 {
     rt_err_t res = RT_EOK;

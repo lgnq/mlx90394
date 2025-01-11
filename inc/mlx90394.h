@@ -310,6 +310,8 @@ rt_err_t mlx90394_get_mode(struct mlx90394_device *dev, rt_uint8_t *mode);
 rt_err_t mlx90394_set_mode(struct mlx90394_device *dev, enum mlx90394_mode application_mode);
 rt_err_t mlx90394_get_range(struct mlx90394_device *dev, rt_uint8_t *range);
 rt_err_t mlx90394_set_range(struct mlx90394_device *dev, enum mlx90394_range range);
+rt_err_t mlx90394_get_woc_mode(struct mlx90394_device *dev, uint8_t *mode);
+rt_err_t mlx90394_set_woc_mode(struct mlx90394_device *dev, uint8_t mode);
 rt_err_t mlx90394_get_dig_filt_xy(struct mlx90394_device *dev, uint8_t *dig_filt);
 rt_err_t mlx90394_set_dig_filt_xy(struct mlx90394_device *dev, uint8_t dig_filt);
 rt_err_t mlx90394_get_dig_filt_z(struct mlx90394_device *dev, uint8_t *dig_filt);
