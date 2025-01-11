@@ -22,6 +22,7 @@ enum
     RT_SENSOR_CTRL_USER_CMD_YONOFF,
     RT_SENSOR_CTRL_USER_CMD_ZONOFF,
     RT_SENSOR_CTRL_USER_CMD_TONOFF,
+    RT_SENSOR_CTRL_USER_CMD_SET_MODE,
 };
 
 int rt_hw_mlx90394_init(const char *name, struct rt_sensor_config *cfg);

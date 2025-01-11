@@ -159,7 +159,6 @@ static rt_err_t mlx90394_control(struct rt_sensor_device *sensor, int cmd, void 
         result = -RT_EINVAL;
         break;
     case RT_SENSOR_CTRL_SET_MODE:
-        result = mlx90394_set_mode(mlx_dev, *(rt_uint16_t *)args & 0xff);
         break;
     case RT_SENSOR_CTRL_SET_POWER:
         break;
@@ -182,6 +181,9 @@ static rt_err_t mlx90394_control(struct rt_sensor_device *sensor, int cmd, void 
         break;
     case RT_SENSOR_CTRL_USER_CMD_TONOFF:
         result = mlx90394_set_tonoff(mlx_dev, *(rt_uint16_t *)args & 0xff);
+        break;
+    case RT_SENSOR_CTRL_USER_CMD_SET_MODE:
+        result = mlx90394_set_mode(mlx_dev, *(rt_uint16_t *)args & 0xff);
         break;
     default:
         return -RT_ERROR;
