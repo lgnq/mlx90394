@@ -383,7 +383,7 @@ rt_err_t mlx90394_get_temperature(struct mlx90394_device *dev, float *t)
     res = mlx90394_mem_read(dev, 0x8, recv_buf, 2);
     if (res == RT_EOK)
     {
-        *t = (float)(((rt_int16_t)recv_buf[1] << 8 ) | recv_buf[0] ) / MAGNETO10_TEMPERATURE_RES;
+        *t = (float)(((rt_int16_t)recv_buf[1] << 8 ) | recv_buf[0]) / MAGNETO10_TEMPERATURE_RES;
     }
 
     return res;
