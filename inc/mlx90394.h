@@ -320,7 +320,6 @@ rt_err_t mlx90394_get_dig_filt_t(struct mlx90394_device *dev, uint8_t *dig_filt)
 rt_err_t mlx90394_set_dig_filt_t(struct mlx90394_device *dev, uint8_t dig_filt);
 
 rt_err_t mlx90394_nop(struct mlx90394_device *dev);
-rt_err_t mlx90394_exit(struct mlx90394_device *dev);
 rt_err_t mlx90394_reset(struct mlx90394_device *dev);
 
 rt_err_t mlx90394_get_gain_sel(struct mlx90394_device *dev, mlx90394_gain_t *gain);
