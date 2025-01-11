@@ -143,39 +143,6 @@ static rt_err_t mlx90394_mem_write(struct mlx90394_device *dev, rt_uint8_t *send
     return res;
 }
 
-static rt_err_t mlx90394_address_reset(struct mlx90394_device *dev)
-{
-    rt_err_t res = RT_EOK;
-    rt_uint8_t send_buf[2];
-
-    send_buf[0] = 0x11;
-    send_buf[1] = 0x06;
-
-    if (dev->bus->type == RT_Device_Class_I2CBUS)
-    {
-#ifdef RT_USING_I2C
-        struct rt_i2c_msg msgs;
-
-        msgs.addr  = dev->i2c_addr;    /* I2C Slave address */
-        msgs.flags = RT_I2C_WR;        /* Read flag */
-        msgs.buf   = send_buf;         /* Read data pointer */
-        msgs.len   = 2;                /* Number of bytes read */
-
-        if (rt_i2c_transfer((struct rt_i2c_bus_device *)dev->bus, &msgs, 1) == 1)
-        {
-            res = RT_EOK;
-        }
-        else
-        {
-            LOG_E("rt_i2c_transfer error\r\n");
-            res = -RT_ERROR;
-        }
-#endif
-    }
-
-    return res;
-}
-
 rt_err_t mlx90394_reset(struct mlx90394_device *dev)
 {
     rt_err_t res = RT_EOK;
