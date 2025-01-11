@@ -505,7 +505,7 @@ rt_err_t mlx90394_get_mode(struct mlx90394_device *dev, rt_uint8_t *mode)
     res = mlx90394_mem_read(dev, MLX90394_ADDR_CTRL1, &ctrl1.byte_val, 1);
     if (res != RT_EOK)
     {
-        LOG_E("Read CTRL1 failed\r\n");
+        LOG_E("read CTRL1 failed\r\n");
         return res;
     }
 
@@ -749,17 +749,56 @@ rt_err_t mlx90394_get_xyz(struct mlx90394_device *dev, struct mlx90394_xyz *xyz)
     return res;
 }
 
+static rt_err_t mlx90394_get_sensitivity(struct mlx90394_device *dev, float *sensitivity)
+{
+    rt_err_t res = RT_EOK;
+    rt_uint8_t range;
+
+    res = mlx90394_get_range(dev, &range);
+    if (res != RT_EOK)
+    {
+        LOG_E("read RANGE failed\r\n");
+        return res;
+    }
+
+    switch (range)
+    {
+    case LOW_CURRENT_HIGH_RANGE:
+        *sensitivity = 1.5;
+        break;
+    case LOW_NOISE_HIGH_RANGE:
+        *sensitivity = 1.5;
+        break;
+    case LOW_NOISE_HIGH_SENSITIVITY:
+        *sensitivity = 0.15;
+        break;
+    default:
+        LOG_E("unkonwn magnetic sensor measurement range\r\n");
+        break;
+    }
+
+    return res;
+}
+
 rt_err_t mlx90394_get_xyz_flux(struct mlx90394_device *dev, struct mlx90394_xyz_flux *xyz)
 {
     rt_err_t res = RT_EOK;
     rt_uint8_t recv_buf[6];
+    float sensitivity;
+
+    res = mlx90394_get_sensitivity(dev, &sensitivity);
+    if (res != RT_EOK)
+    {
+        LOG_E("get sensitivity failed\r\n");
+        return res;
+    }
 
     res = mlx90394_mem_read(dev, 0x1, recv_buf, 6);
     if (res == RT_EOK)
     {
-        xyz->x = (float)(((rt_int16_t)recv_buf[1] << 8) | recv_buf[0]) * MAGNETO10_MAG_FLUX_RESOLUTION;
-        xyz->y = (float)(((rt_int16_t)recv_buf[3] << 8) | recv_buf[2]) * MAGNETO10_MAG_FLUX_RESOLUTION;
-        xyz->z = (float)(((rt_int16_t)recv_buf[5] << 8) | recv_buf[4]) * MAGNETO10_MAG_FLUX_RESOLUTION;
+        xyz->x = (float)(((rt_int16_t)recv_buf[1] << 8) | recv_buf[0]) * sensitivity;
+        xyz->y = (float)(((rt_int16_t)recv_buf[3] << 8) | recv_buf[2]) * sensitivity;
+        xyz->z = (float)(((rt_int16_t)recv_buf[5] << 8) | recv_buf[4]) * sensitivity;
     }
 
     return res;

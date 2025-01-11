@@ -20,20 +20,8 @@
 
 #if MLX90394 == MLX90394RLD_AAA_000
 #define MLX90394_I2C_ADDRESS                    (0x10)        // address pin A0,A1 low (GND), default for mlx90394
-
-/**
- * @brief Magneto 10 magnetic flux resolution.
- * @details Specified resolution for magnetic flux of Magneto 10 Click driver.
- */
-#define MAGNETO10_MAG_FLUX_RESOLUTION   0.15    //uT/LSB
 #elif MLX90394 == MLX90394RLD_AAA_001
 #define MLX90394_I2C_ADDRESS                    (0x60)        // address pin A0,A1 low (GND), default for mlx90394
-
-/**
- * @brief Magneto 10 magnetic flux resolution.
- * @details Specified resolution for magnetic flux of Magneto 10 Click driver.
- */
-#define MAGNETO10_MAG_FLUX_RESOLUTION   1.5     //uT/LSB
 #endif
 
 #define MAGNETO10_TEMPERATURE_RES       50.0
@@ -186,94 +174,12 @@ enum mlx90394_range
     LOW_NOISE_HIGH_SENSITIVITY,
 };
 
-union mlx90394_osr_dig_filt
-{
-    rt_uint8_t byte_val;
-
-    struct
-    {
-        rt_uint8_t dig_filt_temp     : 3;
-        rt_uint8_t dig_filt_hall_xy  : 3;
-        rt_uint8_t osr_temp          : 1;
-        rt_uint8_t osr_hall          : 1;    //BIT7
-    };
-};
-
-enum cmd
-{
-    CMD_NOP               = 0x00,
-    CMD_EXIT              = 0x80,
-    CMD_START_BURST       = 0x10,
-    CMD_WAKE_ON_CHANGE    = 0x20,
-    CMD_START_MEASUREMENT = 0x30,
-    CMD_READ_MEASUREMENT  = 0x40,
-    CMD_READ_REGISTER     = 0x50,
-    CMD_WRITE_REGISTER    = 0x60,
-    CMD_MEMORY_RECALL     = 0xd0,
-    CMD_MEMORY_STORE      = 0xe0,
-    CMD_RESET             = 0xf0
-};
-
-enum axis_flag
-{
-    Z_FLAG = 0x8,
-    Y_FLAG = 0x4,
-    X_FLAG = 0x2,
-    T_FLAG = 0x1
-};
-
-/** HALLCONF settings for CONF1 register. */
-typedef enum mlx90394_hallconf
-{
-    mlx90394_HALLCONF_0 = (0x0),
-    mlx90394_HALLCONF_C = (0xC),
-} mlx90394_hallconf_t;
-
-/** Gain settings for CONF1 register. */
-typedef enum mlx90394_gain
-{
-    mlx90394_GAIN_5X = (0x00),
-    mlx90394_GAIN_4X,
-    mlx90394_GAIN_3X,
-    mlx90394_GAIN_2_5X,
-    mlx90394_GAIN_2X,
-    mlx90394_GAIN_1_67X,
-    mlx90394_GAIN_1_33X,
-    mlx90394_GAIN_1X
-} mlx90394_gain_t;
-
-/** Resolution settings for CONF3 register. */
-typedef enum mlx90394_resolution
-{
-    mlx90394_RES_16,
-    mlx90394_RES_17,
-    mlx90394_RES_18,
-    mlx90394_RES_19,
-} mlx90394_resolution_t;
-
-/** Oversampling settings for CONF3 register. */
-typedef enum mlx90394_oversampling
-{
-    mlx90394_OSR_0,
-    mlx90394_OSR_1,
-    mlx90394_OSR_2,
-    mlx90394_OSR_3,
-} mlx90394_oversampling_t;
-
-/* mlx90394 config structure */
-struct mlx90394_config
-{
-    rt_uint16_t accel_range;
-    rt_uint16_t gyro_range;
-};
-
 /* mlx90394 device structure */
 struct mlx90394_device
 {
     rt_device_t bus;
     rt_uint8_t id;
     rt_uint8_t i2c_addr;
-    struct mlx90394_config config;
 };
 
 /**
@@ -325,9 +231,6 @@ rt_err_t mlx90394_set_dig_filt_t(struct mlx90394_device *dev, uint8_t dig_filt);
 
 rt_err_t mlx90394_nop(struct mlx90394_device *dev);
 rt_err_t mlx90394_reset(struct mlx90394_device *dev);
-
-rt_err_t mlx90394_get_gain_sel(struct mlx90394_device *dev, mlx90394_gain_t *gain);
-rt_err_t mlx90394_get_resolution(struct mlx90394_device *dev, mlx90394_resolution_t *res_x, mlx90394_resolution_t *res_y, mlx90394_resolution_t *res_z);
 
 rt_err_t mlx90394_single_measurement(struct mlx90394_device *dev, struct mlx90394_xyz_flux *xyz);
 #endif
