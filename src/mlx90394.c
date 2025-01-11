@@ -759,63 +759,6 @@ rt_err_t mlx90394_get_xyz_flux(struct mlx90394_device *dev, struct mlx90394_xyz_
     return res;
 }
 
-rt_err_t mlx90394_set_hallconf(struct mlx90394_device *dev, rt_uint8_t hallconf)
-{
-    rt_err_t res = 0;
-
-//    rt_uint16_t register_val;
-//    union mlx90394_register0 reg;
-//
-//    res = mlx90394_read_reg(dev, 0, &register_val);
-//    if (res == -RT_ERROR)
-//        return res;
-//
-//    reg.word_val = register_val;
-//    reg.hallconf = hallconf;
-//    res = mlx90394_write_reg(dev, 0, reg.word_val);
-//    if (res == -RT_ERROR)
-//        return res;
-        
-    return res;
-}
-
-rt_err_t mlx90394_set_oversampling(struct mlx90394_device *dev, mlx90394_oversampling_t osr)
-{
-    rt_err_t res = 0;
-
-//    rt_uint16_t register_val;
-//    union mlx90394_register2 reg;
-//
-//    res = mlx90394_read_reg(dev, 2, &register_val);
-//    if (res == -RT_ERROR)
-//        return res;
-//
-//    reg.word_val = register_val;
-//    reg.osr = osr;
-//    res = mlx90394_write_reg(dev, 2, reg.word_val);
-//    if (res == -RT_ERROR)
-//        return res;
-
-    return res;
-}
-
-rt_err_t mlx90394_get_oversampling(struct mlx90394_device *dev, mlx90394_oversampling_t *osr)
-{
-    rt_err_t res = 0;
-
-//    rt_uint16_t register_val;
-//    union mlx90394_register2 reg;
-//
-//    res = mlx90394_read_reg(dev, 2, &register_val);
-//    if (res == -RT_ERROR)
-//        return res;
-//
-//    reg.word_val = register_val;
-//    *osr = reg.osr;
-        
-    return res;
-}
-
 rt_err_t mlx90394_get_woc_mode(struct mlx90394_device *dev, uint8_t *mode)
 {
     rt_err_t res = RT_EOK;
