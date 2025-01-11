@@ -625,6 +625,67 @@ rt_err_t mlx90394_set_mode(struct mlx90394_device *dev, enum mlx90394_mode appli
     return res;
 }
 
+rt_err_t mlx90394_get_range(struct mlx90394_device *dev, rt_uint8_t *range)
+{
+    rt_err_t res = RT_EOK;
+    mlx90394_ctrl2_t ctrl2;
+
+    res = mlx90394_mem_read(dev, MLX90394_ADDR_CTRL2, &ctrl2.byte_val, 1);
+
+    *range = ctrl2.range_config;
+
+    if (res != RT_EOK)
+    {
+        LOG_E("Read RANGE CONFIG is failed\r\n");
+    }
+
+    return res;
+}
+
+rt_err_t mlx90394_set_range(struct mlx90394_device *dev, enum mlx90394_range range)
+{
+    rt_err_t res = RT_EOK;
+    rt_uint8_t send_buf[2];
+
+    mlx90394_ctrl2_t ctrl2;
+
+    res = mlx90394_mem_read(dev, MLX90394_ADDR_CTRL2, &ctrl2.byte_val, 1);
+    if (res != RT_EOK)
+    {
+        LOG_E("set range configuration failed\r\n");
+    }
+
+    ctrl2.range_config = range;
+
+    send_buf[0] = MLX90394_ADDR_CTRL2;
+    send_buf[1] = ctrl2.byte_val;
+    res = mlx90394_mem_write(dev, send_buf, 2);
+    if (res != RT_EOK)
+    {
+        LOG_E("set range configuration failed\r\n");
+    }
+    else
+    {
+        switch (range)
+        {
+        case LOW_CURRENT_HIGH_RANGE:
+            LOG_D("LOW_CURRENT_HIGH_RANGE\r\n");
+            break;
+        case LOW_NOISE_HIGH_RANGE:
+            LOG_D("LOW_NOISE_HIGH_RANGE\r\n");
+            break;
+        case LOW_NOISE_HIGH_SENSITIVITY:
+            LOG_D("LOW_NOISE_HIGH_SENSITIVITY\r\n");
+            break;
+        default:
+            LOG_D("unknown range configuration\r\n");
+            break;
+        }
+    }
+
+    return res;
+}
+
 rt_err_t mlx90394_get_osr_dig_filt(struct mlx90394_device *dev, union mlx90394_osr_dig_filt *val)
 {
     rt_err_t res = RT_EOK;

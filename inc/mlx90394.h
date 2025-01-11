@@ -179,6 +179,13 @@ enum mlx90394_mode
 //    POWER_DOWN_MODE                     = 0xF
 };
 
+enum mlx90394_range
+{
+    LOW_CURRENT_HIGH_RANGE              = 0x0,
+    LOW_NOISE_HIGH_RANGE,
+    LOW_NOISE_HIGH_SENSITIVITY,
+};
+
 union mlx90394_osr_dig_filt
 {
     rt_uint8_t byte_val;
@@ -327,8 +334,11 @@ rt_err_t mlx90394_set_xonoff(struct mlx90394_device *dev, rt_uint8_t onoff);
 rt_err_t mlx90394_set_yonoff(struct mlx90394_device *dev, rt_uint8_t onoff);
 rt_err_t mlx90394_set_zonoff(struct mlx90394_device *dev, rt_uint8_t onoff);
 rt_err_t mlx90394_set_tonoff(struct mlx90394_device *dev, rt_uint8_t onoff);
-rt_err_t mlx90394_set_mode(struct mlx90394_device *dev, enum mlx90394_mode application_mode);
 
+rt_err_t mlx90394_get_mode(struct mlx90394_device *dev, rt_uint8_t *mode);
+rt_err_t mlx90394_set_mode(struct mlx90394_device *dev, enum mlx90394_mode application_mode);
+rt_err_t mlx90394_get_range(struct mlx90394_device *dev, rt_uint8_t *range);
+rt_err_t mlx90394_set_range(struct mlx90394_device *dev, enum mlx90394_range range);
 rt_err_t mlx90394_nop(struct mlx90394_device *dev);
 rt_err_t mlx90394_exit(struct mlx90394_device *dev);
 rt_err_t mlx90394_reset(struct mlx90394_device *dev);

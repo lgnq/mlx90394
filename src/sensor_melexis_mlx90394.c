@@ -185,6 +185,9 @@ static rt_err_t mlx90394_control(struct rt_sensor_device *sensor, int cmd, void 
     case RT_SENSOR_CTRL_USER_CMD_SET_MODE:
         result = mlx90394_set_mode(mlx_dev, *(rt_uint16_t *)args & 0xff);
         break;
+    case RT_SENSOR_CTRL_USER_CMD_SET_RANGE:
+        result = mlx90394_set_range(mlx_dev, *(rt_uint16_t *)args & 0xff);
+        break;
     default:
         return -RT_ERROR;
     }
