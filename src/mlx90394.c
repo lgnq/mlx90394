@@ -400,6 +400,7 @@ rt_err_t mlx90394_set_xonoff(struct mlx90394_device *dev, rt_uint8_t onoff)
     if (res != RT_EOK)
     {
         LOG_E("read CTRL1 error\r\n");
+        return res;
     }
 
     ctrl1.x_en = onoff;
@@ -426,6 +427,7 @@ rt_err_t mlx90394_set_yonoff(struct mlx90394_device *dev, rt_uint8_t onoff)
     if (res != RT_EOK)
     {
         LOG_E("read CTRL1 error\r\n");
+        return res;
     }
 
     ctrl1.y_en = onoff;
@@ -452,6 +454,7 @@ rt_err_t mlx90394_set_zonoff(struct mlx90394_device *dev, rt_uint8_t onoff)
     if (res != RT_EOK)
     {
         LOG_E("read CTRL1 error\r\n");
+        return res;
     }
 
     ctrl1.z_en = onoff;
@@ -478,6 +481,7 @@ rt_err_t mlx90394_set_tonoff(struct mlx90394_device *dev, rt_uint8_t onoff)
     if (res != RT_EOK)
     {
         LOG_E("read CTRL4 error\r\n");
+        return res;
     }
 
     ctrl4.t_en = onoff;
@@ -499,13 +503,13 @@ rt_err_t mlx90394_get_mode(struct mlx90394_device *dev, rt_uint8_t *mode)
     mlx90394_ctrl1_t ctrl1;
 
     res = mlx90394_mem_read(dev, MLX90394_ADDR_CTRL1, &ctrl1.byte_val, 1);
-
-    *mode = ctrl1.mode;
-
     if (res != RT_EOK)
     {
-        LOG_E("Read MODE is error\r\n");
+        LOG_E("Read CTRL1 failed\r\n");
+        return res;
     }
+
+    *mode = ctrl1.mode;
 
     return res;
 }
@@ -520,7 +524,8 @@ rt_err_t mlx90394_set_mode(struct mlx90394_device *dev, enum mlx90394_mode appli
     res = mlx90394_mem_read(dev, MLX90394_ADDR_CTRL1, &ctrl1.byte_val, 1);
     if (res != RT_EOK)
     {
-        LOG_E("set application mode error\r\n");
+        LOG_E("read CTRL1 failed\r\n");
+        return res;
     }
 
     ctrl1.mode = application_mode;
@@ -584,13 +589,13 @@ rt_err_t mlx90394_get_range(struct mlx90394_device *dev, rt_uint8_t *range)
     mlx90394_ctrl2_t ctrl2;
 
     res = mlx90394_mem_read(dev, MLX90394_ADDR_CTRL2, &ctrl2.byte_val, 1);
-
-    *range = ctrl2.range_config;
-
     if (res != RT_EOK)
     {
-        LOG_E("Read RANGE CONFIG is failed\r\n");
+        LOG_E("read CTRL2 failed\r\n");
+        return res;
     }
+
+    *range = ctrl2.range_config;
 
     return res;
 }
@@ -605,7 +610,8 @@ rt_err_t mlx90394_set_range(struct mlx90394_device *dev, enum mlx90394_range ran
     res = mlx90394_mem_read(dev, MLX90394_ADDR_CTRL2, &ctrl2.byte_val, 1);
     if (res != RT_EOK)
     {
-        LOG_E("set range configuration failed\r\n");
+        LOG_E("read CTRL2 failed\r\n");
+        return res;
     }
 
     ctrl2.range_config = range;
@@ -647,7 +653,7 @@ rt_err_t mlx90394_get_osr_hall(struct mlx90394_device *dev, uint8_t *val)
     res = mlx90394_mem_read(dev, MLX90394_ADDR_CTRL3, &ctrl3.byte_val, 1);
     if (res != RT_EOK)
     {
-        LOG_E("Read CTRL3 failed\r\n");
+        LOG_E("read CTRL3 failed\r\n");
         return res;
     }
 
@@ -691,7 +697,7 @@ rt_err_t mlx90394_get_osr_temp(struct mlx90394_device *dev, uint8_t *val)
     res = mlx90394_mem_read(dev, MLX90394_ADDR_CTRL3, &ctrl3.byte_val, 1);
     if (res != RT_EOK)
     {
-        LOG_E("Read CTRL3 failed\r\n");
+        LOG_E("read CTRL3 failed\r\n");
         return res;
     }
 
@@ -765,13 +771,13 @@ rt_err_t mlx90394_get_woc_mode(struct mlx90394_device *dev, uint8_t *mode)
     mlx90394_ctrl2_t ctrl2;
 
     res = mlx90394_mem_read(dev, MLX90394_ADDR_CTRL2, &ctrl2.byte_val, 1);
-
-    *mode = ctrl2.woc_mode;
-
     if (res != RT_EOK)
     {
-        LOG_E("Read WOC_MODE failed\r\n");
+        LOG_E("read CTRL2 failed\r\n");
+        return res;
     }
+
+    *mode = ctrl2.woc_mode;
 
     return res;
 }
@@ -786,7 +792,8 @@ rt_err_t mlx90394_set_woc_mode(struct mlx90394_device *dev, uint8_t mode)
     res = mlx90394_mem_read(dev, MLX90394_ADDR_CTRL2, &ctrl2.byte_val, 1);
     if (res != RT_EOK)
     {
-        LOG_E("read ctrl2 failed\r\n");
+        LOG_E("read CTRL2 failed\r\n");
+        return res;
     }
 
     ctrl2.woc_mode = mode;
@@ -808,13 +815,13 @@ rt_err_t mlx90394_get_dig_filt_xy(struct mlx90394_device *dev, uint8_t *dig_filt
     mlx90394_ctrl3_t ctrl3;
 
     res = mlx90394_mem_read(dev, MLX90394_ADDR_CTRL3, &ctrl3.byte_val, 1);
-
-    *dig_filt = ctrl3.dig_filt_hall_xy;
-
     if (res != RT_EOK)
     {
-        LOG_E("Read DIG_FILT_XY failed\r\n");
+        LOG_E("read CTRL3 failed\r\n");
+        return res;
     }
+
+    *dig_filt = ctrl3.dig_filt_hall_xy;
 
     return res;
 }
@@ -829,7 +836,8 @@ rt_err_t mlx90394_set_dig_filt_xy(struct mlx90394_device *dev, uint8_t dig_filt)
     res = mlx90394_mem_read(dev, MLX90394_ADDR_CTRL3, &ctrl3.byte_val, 1);
     if (res != RT_EOK)
     {
-        LOG_E("read ctrl3 failed\r\n");
+        LOG_E("read CTRL3 failed\r\n");
+        return res;
     }
 
     ctrl3.dig_filt_hall_xy = dig_filt;
@@ -851,13 +859,13 @@ rt_err_t mlx90394_get_dig_filt_z(struct mlx90394_device *dev, uint8_t *dig_filt)
     mlx90394_ctrl4_t ctrl4;
 
     res = mlx90394_mem_read(dev, MLX90394_ADDR_CTRL4, &ctrl4.byte_val, 1);
-
-    *dig_filt = ctrl4.dig_filt_hall_z;
-
     if (res != RT_EOK)
     {
-        LOG_E("Read DIG_FILT_Z failed\r\n");
+        LOG_E("read CTRL4 failed\r\n");
+        return res;
     }
+
+    *dig_filt = ctrl4.dig_filt_hall_z;
 
     return res;
 }
@@ -872,7 +880,8 @@ rt_err_t mlx90394_set_dig_filt_z(struct mlx90394_device *dev, uint8_t dig_filt)
     res = mlx90394_mem_read(dev, MLX90394_ADDR_CTRL4, &ctrl4.byte_val, 1);
     if (res != RT_EOK)
     {
-        LOG_E("read ctrl4 failed\r\n");
+        LOG_E("read CTRL4 failed\r\n");
+        return res;
     }
 
     ctrl4.dig_filt_hall_z = dig_filt;
@@ -894,13 +903,13 @@ rt_err_t mlx90394_get_dig_filt_t(struct mlx90394_device *dev, uint8_t *dig_filt)
     mlx90394_ctrl3_t ctrl3;
 
     res = mlx90394_mem_read(dev, MLX90394_ADDR_CTRL3, &ctrl3.byte_val, 1);
-
-    *dig_filt = ctrl3.dig_filt_temp;
-
     if (res != RT_EOK)
     {
-        LOG_E("Read DIG_FILT_T failed\r\n");
+        LOG_E("read CTRL3 failed\r\n");
+        return res;
     }
+
+    *dig_filt = ctrl3.dig_filt_temp;
 
     return res;
 }
@@ -915,7 +924,8 @@ rt_err_t mlx90394_set_dig_filt_t(struct mlx90394_device *dev, uint8_t dig_filt)
     res = mlx90394_mem_read(dev, MLX90394_ADDR_CTRL3, &ctrl3.byte_val, 1);
     if (res != RT_EOK)
     {
-        LOG_E("read ctrl3 failed\r\n");
+        LOG_E("read CTRL3 failed\r\n");
+        return res;
     }
 
     ctrl3.dig_filt_temp = dig_filt;
@@ -939,8 +949,6 @@ void mlx90394_setup(struct mlx90394_device *dev)
 
 //    mlx90394_set_gain_sel(dev, 4);
 //    mlx90394_set_resolution(dev, 0, 0, 0);
-//    mlx90394_set_oversampling(dev, 3);
-//    mlx90394_set_digital_filtering(dev, 7);
 }
 
 /**
@@ -1132,11 +1140,6 @@ static void mlx90394(int argc, char **argv)
         LOG_I("         probe <dev_name>      Probe mlx90394 by given name, ex:i2c2\n");
         LOG_I("         id                    Print CID and DID\n");
         LOG_I("         stat1                 Print stat1\n");
-        LOG_I("                               var = [0 - 3] means [250 - 2000DPS]\n");
-        LOG_I("         ar <var>              Set accel range to var\n");
-        LOG_I("                               var = [0 - 3] means [2 - 16G]\n");
-        LOG_I("         sleep <var>           Set sleep status\n");
-        LOG_I("                               var = 0 means disable, = 1 means enable\n");
         LOG_I("         read [num]            read [num] times mlx90394\n");
         LOG_I("                               num default 5\n");
         return;
