@@ -1073,26 +1073,25 @@ struct mlx90394_device *mlx90394_init(const char *dev_name, rt_uint8_t param)
         }
         else
         {
+            rt_uint8_t id[2];
+
             /* find mlx90394 device at address: MLX90394_I2C_ADDRESS */
             dev->i2c_addr = MLX90394_I2C_ADDRESS;
+            if (mlx90394_mem_read(dev, 0x0A, id, 2) != RT_EOK)
+            {
+                LOG_E("Can't find device at '%s'!", dev_name);
+                goto __exit;
+            }
+            else
+            {
+                LOG_D("CID is 0x%x\r\n", id[0]);
+                LOG_D("DID is 0x%x\r\n", id[1]);
+
+                mlx90394_set_mode(dev, SINGLE_MEASUREMENT_MODE);
+            }
+
+            LOG_D("Device i2c address is:'0x%x'!\r\n", dev->i2c_addr);
         }
-
-        rt_uint8_t id[2];
-
-        if (mlx90394_mem_read(dev, 0x0A, id, 2) != RT_EOK)
-        {
-            LOG_E("Can't find device at '%s'!", dev_name);
-            goto __exit;
-        }
-        else
-        {
-            LOG_I("CID is 0x%x\r\n", id[0]);
-            LOG_I("DID is 0x%x\r\n", id[1]);
-
-            mlx90394_set_mode(dev, SINGLE_MEASUREMENT_MODE);
-        }
-
-        LOG_I("Device i2c address is:'0x%x'!\r\n", dev->i2c_addr);
 #endif        
     }
     else
