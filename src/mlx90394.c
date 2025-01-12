@@ -788,9 +788,9 @@ rt_err_t mlx90394_get_xyz_flux(struct mlx90394_device *dev, struct mlx90394_xyz_
     res = mlx90394_mem_read(dev, 0x1, recv_buf, 6);
     if (res == RT_EOK)
     {
-        xyz->x = ((rt_int16_t)((recv_buf[1] << 8) | recv_buf[0])) * (dev->sensitivity);
-        xyz->y = ((rt_int16_t)((recv_buf[3] << 8) | recv_buf[2])) * (dev->sensitivity);
-        xyz->z = ((rt_int16_t)((recv_buf[5] << 8) | recv_buf[4])) * (dev->sensitivity);
+        xyz->x = (dev->sensitivity) * ((rt_int16_t)((recv_buf[1] << 8) | recv_buf[0]));
+        xyz->y = (dev->sensitivity) * ((rt_int16_t)((recv_buf[3] << 8) | recv_buf[2]));
+        xyz->z = (dev->sensitivity) * ((rt_int16_t)((recv_buf[5] << 8) | recv_buf[4]));
     }
 
     return res;
@@ -1054,6 +1054,25 @@ static rt_err_t mlx90394_continuous_measurement(struct mlx90394_device *dev, str
     return status;
 }
 
+rt_err_t mlx90394_single_measurement_raw(struct mlx90394_device *dev, struct mlx90394_xyz *xyz)
+{
+    rt_uint8_t status = RT_EOK;
+    union mlx90394_stat1 stat1;
+
+    status = mlx90394_set_mode(dev, SINGLE_MEASUREMENT_MODE);
+
+    stat1.byte_val = 0;
+    while (stat1.drdy == 0)
+    {
+        status = mlx90394_get_stat1(dev, &stat1);
+        rt_thread_delay(50);
+    }
+
+    status = mlx90394_get_xyz(dev, xyz);
+
+    return status;
+}
+
 rt_err_t mlx90394_single_measurement(struct mlx90394_device *dev, struct mlx90394_xyz_flux *xyz)
 {
     rt_uint8_t status = RT_EOK;
@@ -1077,7 +1096,7 @@ rt_err_t mlx90394_single_measurement(struct mlx90394_device *dev, struct mlx9039
  * This function initialize the mlx90394 device.
  *
  * @param dev_name the name of transfer device
- * @param param the i2c device address for i2c communication, RT_NULL for spi
+ * @param param the i2c device address for i2c communication
  *
  * @return the pointer of device driver structure, RT_NULL represents  initialization failed.
  */

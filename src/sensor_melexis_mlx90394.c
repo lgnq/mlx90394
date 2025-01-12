@@ -73,9 +73,9 @@ static rt_size_t _mlx90394_polling_get_data(rt_sensor_t sensor, struct rt_sensor
 {
     if (sensor->info.type == RT_SENSOR_CLASS_MAG)
     {
-        struct mlx90394_xyz_flux xyz;
+        struct mlx90394_xyz xyz;
 
-        if (mlx90394_single_measurement((struct mlx90394_device *)sensor->parent.user_data, &xyz) != RT_EOK)
+        if (mlx90394_single_measurement_raw((struct mlx90394_device *)sensor->parent.user_data, &xyz) != RT_EOK)
         {
             LOG_E("mlx90394_single_measurement error\r\n");
 
@@ -245,9 +245,9 @@ INIT_ENV_EXPORT(rt_hw_mlx90394_port);
 
 static void read_mps_entry(void *parameter)
 {
+    rt_size_t res;
     rt_device_t dev = RT_NULL;
     struct rt_sensor_data sensor_data;
-    rt_size_t res;
 
     dev = rt_device_find(parameter);
     if (dev == RT_NULL)
@@ -277,11 +277,15 @@ static void read_mps_entry(void *parameter)
         {
             LOG_E("read data failed!size is %d\n", res);
             rt_device_close(dev);
+
             return;
         }
         else
         {
             rt_kprintf("data:%d,%d,%d\n", sensor_data.data.mag.x, sensor_data.data.mag.y, sensor_data.data.mag.z);
+//            rt_kprintf("data:%d.%d,%d.%d,%d.%d\n", (rt_int16_t)xyz.x, (rt_uint16_t)(xyz.x * 100) % 100,
+//                                                   (rt_int16_t)xyz.y, (rt_uint16_t)(xyz.y * 100) % 100,
+//                                                   (rt_int16_t)xyz.z, (rt_uint16_t)(xyz.z * 100) % 100);
         }
 
         rt_thread_mdelay(10);
