@@ -17,6 +17,8 @@
 
 #define mlx_dev ((struct mlx90394_device *)sensor->parent.user_data)
 
+rt_uint16_t sample_freq = 100;
+
 static struct mlx90394_device *_mlx90394_init(struct rt_sensor_intf *intf)
 {
     rt_uint8_t i2c_addr = (rt_uint32_t)(intf->user_data) & 0xff;
@@ -288,7 +290,7 @@ static void read_mps_entry(void *parameter)
 //                                                   (rt_int16_t)xyz.z, (rt_uint16_t)(xyz.z * 100) % 100);
         }
 
-        rt_thread_mdelay(10);
+        rt_thread_mdelay(sample_freq);
     }
 }
 
@@ -319,6 +321,16 @@ rt_err_t mlx90394_measurement_onoff(int argc, char **argv)
     }
 
     return -1;
+}
+
+rt_err_t mlx90394_set_sample_freq(int argc, char **argv)
+{
+    rt_size_t res = RT_EOK;
+
+    sample_freq = atoi(argv[1]);
+    rt_kprintf("sample freq = %d\r\n", sample_freq);
+
+    return res;
 }
 
 rt_err_t mlx90394_ops_ctrl(int argc, char **argv)
@@ -360,7 +372,7 @@ rt_err_t mlx90394_ops_ctrl(int argc, char **argv)
 
 #ifdef FINSH_USING_MSH
     MSH_CMD_EXPORT(mlx90394_measurement_onoff, mlx90394 sensor function);
-//    MSH_CMD_EXPORT(mlx90394_ctrl_set_sample_freq, mlx90394 sensor function);
+    MSH_CMD_EXPORT(mlx90394_set_sample_freq, mlx90394 sensor function);
     MSH_CMD_EXPORT(mlx90394_ops_ctrl, mlx90394 sensor function);
 #endif
 
