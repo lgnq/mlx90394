@@ -1137,18 +1137,27 @@ struct mlx90394_device *mlx90394_init(const char *dev_name, rt_uint8_t param)
 
         if (mlx90394_mem_read(dev, 0x0A, id, 2) != RT_EOK)
         {
-            LOG_E("Can't find device at '%s'!", dev_name);
-            goto __exit;
-        }
-        else
-        {
-            LOG_I("CID is 0x%x\r\n", id[0]);
-            LOG_I("DID is 0x%x\r\n", id[1]);
+            dev->i2c_addr = i;
 
-            mlx90394_get_sensitivity(dev, &(dev->sensitivity));
+            if (mlx90394_mem_read(dev, 0x0A, id, 2) == RT_EOK)
+            {
+                if (id[0] == 0x94)
+                {
+                    LOG_I("Device i2c address is:'0x%x'!\r\n", dev->i2c_addr);
+
+                    LOG_I("CID is 0x%x\r\n", id[0]);
+                    LOG_I("DID is 0x%x\r\n", id[1]);
+
+                    mlx90394_get_sensitivity(dev, &(dev->sensitivity));
+
+                    return dev;
+                }
+            }
         }
 
-        LOG_I("Device i2c address is:'0x%x'!\r\n", dev->i2c_addr);
+        LOG_E("Unsupported device:'%s'!", dev_name);
+        goto __exit;
+
 #endif        
     }
     else
@@ -1157,13 +1166,12 @@ struct mlx90394_device *mlx90394_init(const char *dev_name, rt_uint8_t param)
         goto __exit;
     }
 
-    return dev;
-
 __exit:
     if (dev != RT_NULL)
     {
         rt_free(dev);
     }
+
     return RT_NULL;
 }
 
