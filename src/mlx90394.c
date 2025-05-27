@@ -1135,7 +1135,7 @@ struct mlx90394_device *mlx90394_init(const char *dev_name, rt_uint8_t param)
 
         rt_uint8_t id[2];
 
-        if (mlx90394_mem_read(dev, 0x0A, id, 2) != RT_EOK)
+        for (rt_uint8_t i=0; i<128; i++)
         {
             dev->i2c_addr = i;
 
